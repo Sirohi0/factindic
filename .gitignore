@@ -37,6 +37,8 @@ verify_setup.py
 /results/prompt_pilot_review_candidate_2026-11-09/*
 !/results/prompt_pilot_review_candidate_2026-11-09/assistant_only_review_status_2026-11-13.md
 
-# Only the current teacher deck is intended for the public repo
+# Only the current teacher deck and supervisor brief are intended for the public repo
 *.pptx
 !FactIndic_Progress_Checkpoint_2026-11-13_NLI_rescored.pptx
+*.pdf
+!results/factindic_checkpoint_for_maam_2026-11-13.pdf
