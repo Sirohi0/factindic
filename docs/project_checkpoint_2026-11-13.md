@@ -18,7 +18,7 @@ The previous-scope baseline experiments, controlled prompt pilot, assistant-only
 4. **Prompt pilot:** 152 summaries from 76 matched documents, with standard and factuality-aware prompts. Seven Hindi/synthetic pairs were excluded symmetrically after generation-quality failures.
 5. **Assistant/NLI screening:** 107 supported, 19 minor-error, and 26 major-error assistant flags. NLI medians are near 1.0, paired results vary by condition, and neither automated method establishes a prompt winner.
 6. **Source-display audit:** 28 terminal replacement markers in the initial source display were removed in a separate clean copy. The clean-source NLI re-score has no markers or hypothesis truncations; all NLI probability values and chunk/token indices match the earlier run.
-7. **Software and reporting:** 38 local unit tests pass. The integrated interim report, updated AI-only summary, clean-source audit, and corrected 7-slide scope deck are saved in the project.
+7. **Software and reporting:** 38 local unit tests pass. The corrected Colab notebook is prepared and syntax/mocked-workflow checked; the integrated interim report, AI-only summary, clean-source audit, and corrected 7-slide scope deck are saved in the project.
 
 ## Corrected development ladder
 
@@ -42,6 +42,7 @@ The 45-row assistant attention queue can help prioritize human review, but it do
 
 - Integrated report: `results/factindic_interim_project_report_2026-11-13.md`
 - Corrected teacher deck and brief: `FactIndic_Scope_Correction_2026-11-13.pptx` and `.pdf`
+- Corrected Roman-script Colab pilot: `factindic_romanized_hinglish_colab.ipynb` (run after GupShup access and teacher data-fit confirmation)
 - Previous-scope supervisor brief: `results/factindic_checkpoint_for_maam_2026-11-13.pdf` (do not present as Roman-script Hinglish evidence)
 - Prompt-pilot AI-only summary: `results/ai_only_prompt_pilot_summary_2026-11-13.md`
 - Paired baseline comparison: `results/paired_baseline_comparison.md`

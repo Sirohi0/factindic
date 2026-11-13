@@ -31,12 +31,12 @@ The authors' repository says to request access through their form and identifies
 ## Corrected experimental plan
 
 1. Obtain GupShup access and inspect the `h2e` train/validation/test files. Use `scripts/audit_romanized_parallel.py` to check line alignment and script characteristics, then manually inspect its private sample before retaining the official test split.
-2. Use a manageable, fixed sample from the official test split. Record source IDs, script counts, word counts, and truncation before generating anything.
-3. Compare two LLMs on the same sources and under the same decoding budget. For each model, run a standard prompt and a factuality-aware prompt. This separates model effects from prompt effects.
-4. Run generation and any NLI screening in Colab. Do not run heavy inference on the Mac.
-5. Create a new blind human-review sheet from the corrected Roman-script sample. Do not annotate the existing 152-summary sheet as the target Hinglish result.
-6. Compare reference-based summary quality and source-based human factuality separately. Treat NLI as a screening signal only, and report one-annotator limitations.
-7. Update the report, slides, and dashboard after the corrected sample and labels are ready.
+2. The ready Colab notebook samples 30 fixed sources from the official test split, verifies source/reference row alignment, records truncation per tokenizer, and creates a private run manifest. The first pilot contains 120 outputs (30 sources × 2 models × 2 prompts); it is exploratory.
+3. Compare Qwen3-4B and Gemma 3 4B IT on identical sources and decoding settings. Both model cards describe multilingual support; their similar size makes a constrained Colab comparison practical. Qwen3's model card lists 100+ languages, and Gemma 3 lists 140+; these claims do not guarantee Hinglish performance. Gemma access requires accepting Google's Hugging Face terms. See the [Qwen3-4B model card](https://huggingface.co/Qwen/Qwen3-4B) and [Gemma 3 4B IT model card](https://huggingface.co/google/gemma-3-4b-it).
+4. For each model, use paired standard and factuality-aware instructions with greedy decoding. Heavy generation runs in Colab, not on the Mac.
+5. Review the 120 generated summaries in a blinded, private sheet. Judge against the source, not the reference. Do not annotate the existing 152-summary sheet as the target Hinglish result.
+6. Compare English reference-based ROUGE separately from source-based human factuality. Report the single-annotator limit and exploratory sample size; no NLI score is treated as a factuality result.
+7. The ready notebook exports a separate aggregate-only archive without sources, references, row IDs, or generations. Keep the full run and annotation data private; update the report, slides, and dashboard only after the corrected run and labels are complete.
 
 ## Natural-data limitation and backup
 

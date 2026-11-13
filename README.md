@@ -21,6 +21,8 @@ The earlier controlled standard-vs-factuality-aware pilot has a 152-summary qual
 
 The current teacher-facing scope correction is `FactIndic_Scope_Correction_2026-11-13.pptx` and `FactIndic_Scope_Correction_2026-11-13.pdf`. The older deck and supervisor brief describe the previous Devanagari-based scope. The corrected Roman-script Hinglish run is pending dataset access. See `docs/dataset_scope_correction_2026-11-13.md`.
 
+A corrected Colab experiment is prepared in `factindic_romanized_hinglish_colab.ipynb`. It uses a paired 2-model × 2-prompt pilot, a private blind factuality sheet, paired ROUGE summaries, and private storage for any GupShup text. Run it only after receiving dataset access and confirming that the translated conversation domain is acceptable to the teacher.
+
 ## Foundation and attribution
 - Summarization baseline: XL-Sum Hindi data and the mT5_multilingual_XLSum
   checkpoint, by Hasan et al. (2021), BUET CSE NLP Group. Not my work.
@@ -68,6 +70,7 @@ in this repository. It does not run model inference or expose row-level data.
 | `scripts/audit_romanized_parallel.py` | Checks paired source/reference alignment and Roman/Devanagari script counts for private GupShup h2e files; it does not replace manual Hinglish review |
 | `results/<run>/` | Run metadata, metrics, predictions, and analysis artifacts |
 | `factindic_prompt_comparison_colab_revamped.ipynb` | Refreshed Colab prompt pilot with input checks, progress checkpoints, and diagnostic-vs-annotation export gating |
+| `factindic_romanized_hinglish_colab.ipynb` | Corrected GupShup h2e Roman-script pilot: 30 paired test sources, two multilingual 4B models, two prompts, blind human factuality review, paired ROUGE bootstrap |
 | `docs/factuality_annotation_protocol.md` | Human factuality labels and adjudication guidance |
 | `docs/project_checkpoint_2026-11-13.md` | Current progress ladder, limitations, and next steps |
 | `docs/dataset_scope_correction_2026-11-13.md` | Corrected Roman-script Hinglish target, existing-data audit, and replacement plan |
