@@ -10,21 +10,21 @@ const conditions = {
     title: "Hindi",
     count: "23 matched pairs",
     delta: "−0.0353 mean difference · median −0.0002",
-    marker: 42.9,
+    marker: 35.3,
     summary: "The factuality-aware prompt had a lower mean max-entailment score in this sample, while the median paired difference was nearly zero. This model score alone does not establish factuality."
   },
   synthetic: {
     title: "Synthetic p100 code-mix",
     count: "23 matched pairs",
     delta: "−0.0025 mean difference · median −0.0005",
-    marker: 49.4,
+    marker: 49.0,
     summary: "Mean and median paired differences were close to zero. The result is exploratory and applies to the selected synthetic p100 sample."
   },
   mutant: {
     title: "Authentic MUTANT Hinglish",
     count: "30 matched pairs",
     delta: "+0.0920 mean difference · median +0.0001",
-    marker: 73,
+    marker: 88.3,
     summary: "The mean difference was positive while the median was almost zero, consistent with a skewed, saturated score distribution. This should not be read as a prompt win."
   }
 };
