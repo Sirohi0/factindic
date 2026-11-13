@@ -1,6 +1,0 @@
-config: mt5 768 12
-params: 582401280
-dataset shape: (8847, 5)
-columns: ['id', 'url', 'title', 'summary', 'text']
-model sha: 2437a524effdbadc327ced84595508f1e32025b3
-dataset revision sha: ab04842511fc357feae53281fd104aa3c36dff07

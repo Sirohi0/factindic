@@ -1,0 +1,10 @@
+torch
+transformers
+sentencepiece
+protobuf
+huggingface_hub
+pandas
+pyarrow
+numpy
+rouge-score
+pytest

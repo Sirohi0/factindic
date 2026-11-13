@@ -1,2 +1,42 @@
+# Python environments and generated files
 .venv/
 __pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+.DS_Store
+
+# Local setup snapshots and one-off model download check
+.env
+.env.*
+!.env.example
+env_verification.txt
+verify_setup.py
+
+# Dataset files, annotation sheets, generated predictions, and archives
+/data/
+*.csv
+*.jsonl
+*.numbers
+*.xlsx
+*.zip
+
+# Results are private/local by default. Allow only aggregate reports below.
+/results/*
+!/results/paired_baseline_comparison.md
+!/results/assistant_only_prompt_comparison_2026-11-09.md
+!/results/ai_only_prompt_pilot_summary_2026-11-13.md
+!/results/factindic_interim_project_report_2026-11-13.md
+!/results/mutant_source_provenance_audit_2026-11-13.md
+!/results/factindic_checkpoint_for_maam_2026-11-13.pdf
+!/results/prompt_pilot_nli_rescore_2026-11-13/
+/results/prompt_pilot_nli_rescore_2026-11-13/*
+!/results/prompt_pilot_nli_rescore_2026-11-13/nli_rescore_comparison_2026-11-13.md
+!/results/prompt_pilot_review_candidate_2026-11-09/
+/results/prompt_pilot_review_candidate_2026-11-09/*
+!/results/prompt_pilot_review_candidate_2026-11-09/assistant_only_review_status_2026-11-13.md
+
+# Only the current teacher deck is intended for the public repo
+*.pptx
+!FactIndic_Progress_Checkpoint_2026-11-13_NLI_rescored.pptx
