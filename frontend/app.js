@@ -1,31 +1,31 @@
 const conditions = {
   all: {
-    title: "Signals differ by condition",
+    title: "Prior Devanagari-based pilot",
     count: "76 matched pairs",
-    delta: "Condition-level differences vary",
+    delta: "Not target-style evidence",
     marker: 50,
-    summary: "Across conditions, the median paired differences are close to zero. The NLI model’s overall median max-entailment is 0.9980, indicating ceiling saturation."
+    summary: "This earlier screening run used Devanagari-based sources. Its median paired differences are close to zero and its NLI scores are ceiling-saturated. Do not read it as a Roman-script Hinglish result."
   },
   hindi: {
-    title: "Hindi",
+    title: "Prior Hindi-script condition",
     count: "23 matched pairs",
     delta: "−0.0353 mean difference · median −0.0002",
     marker: 35.3,
-    summary: "The factuality-aware prompt had a lower mean max-entailment score in this sample, while the median paired difference was nearly zero. This model score alone does not establish factuality."
+    summary: "This prior condition used Devanagari Hindi. It is included only to document the earlier pilot and does not represent the corrected Roman-script Hinglish target."
   },
   synthetic: {
-    title: "Synthetic p100 code-mix",
+    title: "Prior synthetic p100 condition",
     count: "23 matched pairs",
     delta: "−0.0025 mean difference · median −0.0005",
     marker: 49.0,
-    summary: "Mean and median paired differences were close to zero. The result is exploratory and applies to the selected synthetic p100 sample."
+    summary: "This prior synthetic condition used Devanagari-based sources with inserted English tokens. It does not test Hindi written in Latin characters."
   },
   mutant: {
-    title: "Authentic MUTANT Hinglish",
+    title: "Prior MUTANT sample",
     count: "30 matched pairs",
     delta: "+0.0920 mean difference · median +0.0001",
     marker: 88.3,
-    summary: "The mean difference was positive while the median was almost zero, consistent with a skewed, saturated score distribution. This should not be read as a prompt win."
+    summary: "The 30-source local sample was Devanagari-dominant. The original dataset is retained for provenance and background, but this sample does not evaluate the target Roman-script style."
   }
 };
 

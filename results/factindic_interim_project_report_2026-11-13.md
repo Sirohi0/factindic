@@ -1,10 +1,14 @@
-# FactIndic — Interim Project Report
+# FactIndic — Interim Project Report (Previous Scope)
 
-**Status:** computational and automated-screening stages are documented; human factuality annotation has not been completed. This report is suitable for an interim project checkpoint, not a factuality-performance claim.
+> **Scope correction (13 November 2026):** this report describes earlier Hindi-script/code-mix experiments. The intended code-mixed target is Roman-script Hinglish, with Hindi transliterated into Latin letters and English mixed in. A script audit found that all 76 unique sources in the previous prompt pilot were Devanagari-based; none matched the intended Roman-script style. Keep the code-mixed pilot results below as exploratory prior work, not as findings about Roman-script Hinglish. The prior Hindi and synthetic p100 baselines remain valid only for their original Hindi-script task. The corrected plan is in [`docs/dataset_scope_correction_2026-11-13.md`](../docs/dataset_scope_correction_2026-11-13.md).
+
+**Replacement data is pending access.** GupShup h2e is the recommended candidate because its paper describes Romanized Hindi-English conversations paired with English summaries. Its conversations were manually translated from SAMSum, not organically collected chat. The dataset requires an access request and cannot be redistributed through the public repository.
+
+**Status:** historical computational and automated-screening stages are documented; corrected Roman-script Hinglish evaluation has not begun, and human factuality annotation has not been completed. This report is not a final evaluation of the intended Roman-script Hinglish target.
 
 ## Project question
 
-Does a factuality-aware instruction change Hindi summary quality for Hindi, synthetically code-mixed, and naturally code-mixed sources?
+The intended question is: does a factuality-aware instruction change LLM summary factuality for Roman-script Hinglish? The previous pilot below instead used Hindi-script sources and is retained for audit only.
 
 The project separates lexical-overlap evaluation from factuality. ROUGE results compare summaries with references; assistant review and multilingual NLI provide exploratory screening; only a genuine human review can support human factuality labels.
 
@@ -90,5 +94,6 @@ The local unit-test suite passes: 38 tests passed in 0.89 seconds. This validate
 - Clean-source NLI re-score and audit: `results/prompt_pilot_nli_rescore_2026-11-13/`
 - Assistant attention queue: `results/prompt_pilot_review_candidate_2026-11-09/assistant_review_attention_queue_2026-11-13.csv`
 - MUTANT provenance method and limits: `results/mutant_source_provenance_audit_2026-11-13.md`
-- Current teacher deck: `FactIndic_Progress_Checkpoint_2026-11-13_NLI_rescored.pptx`
-- Supervisor brief PDF: `results/factindic_checkpoint_for_maam_2026-11-13.pdf`
+- Previous-scope teacher deck: `FactIndic_Progress_Checkpoint_2026-11-13_NLI_rescored.pptx` (not suitable as the current target-style evaluation)
+- Previous-scope supervisor brief: `results/factindic_checkpoint_for_maam_2026-11-13.pdf` (not suitable as the current target-style evaluation)
+- Scope correction and replacement plan: `docs/dataset_scope_correction_2026-11-13.md`

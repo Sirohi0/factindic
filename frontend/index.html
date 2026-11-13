@@ -23,13 +23,14 @@
   </header>
 
   <main id="top">
+    <aside class="scope-alert shell" aria-label="Research scope correction"><span class="scope-alert-icon">!</span><p><strong>Dataset scope corrected.</strong> The target is Roman-script Hinglish (Hindi transliterated into Latin letters, mixed with English). The earlier 76-source pilot was Devanagari-based and is not evidence for this target. The corrected dataset run is pending.</p><a href="https://github.com/Sirohi0/factindic/blob/main/docs/dataset_scope_correction_2026-11-13.md" target="_blank" rel="noreferrer">See correction ↗</a></aside>
     <section class="hero shell">
       <div class="hero-copy">
         <div class="eyebrow"><span class="pulse"></span> NLP research project <span class="eyebrow-divider">/</span> 2026</div>
         <h1>Summaries should<br>stay <em>true to the source.</em></h1>
-        <p class="hero-lede">FactIndic studies factuality-aware summarization for Hindi, synthetic code-mixed Hindi–English, and naturally code-mixed text.</p>
+        <p class="hero-lede">FactIndic studies whether factuality-aware prompting helps LLMs summarize Roman-script Hinglish: Hindi words written in Latin letters and mixed with English.</p>
         <div class="hero-actions"><a class="button button-dark" href="#findings">Explore the findings <span>↓</span></a><a class="text-link" href="https://github.com/Sirohi0/factindic/blob/main/results/factindic_interim_project_report_2026-11-13.md" target="_blank" rel="noreferrer">Read interim report <span>↗</span></a></div>
-        <div class="hero-note"><span class="note-icon">i</span><span>Current status: exploratory AI-only results. Human factuality labels are pending.</span></div>
+        <div class="hero-note"><span class="note-icon">i</span><span>Roman-script Hinglish data access, corrected generation, and human factuality review are pending.</span></div>
       </div>
       <div class="hero-visual" aria-label="Three text streams combining into a grounded summary illustration">
         <div class="visual-orbit orbit-one"></div><div class="visual-orbit orbit-two"></div>
@@ -43,21 +44,21 @@
 
     <section class="stats-band" id="study">
       <div class="shell stats-grid">
-        <div class="stat-intro"><span class="section-kicker">THE STUDY</span><h2>Three settings.<br>One question.</h2><p>Does a factuality-aware instruction change summary quality across Hindi and code-mixed inputs?</p></div>
-        <article class="stat-card"><span class="stat-number">500</span><span class="stat-title">Hindi baseline</span><span class="stat-detail">XL-Sum test articles<br>mT5 multilingual XLSum</span></article>
-        <article class="stat-card"><span class="stat-number">500</span><span class="stat-title">Synthetic p100</span><span class="stat-detail">Paired with the same<br>Hindi article IDs</span></article>
-        <article class="stat-card"><span class="stat-number">76<span class="stat-unit"> pairs</span></span><span class="stat-title">Prompt pilot</span><span class="stat-detail">152 summaries<br>3 language conditions</span></article>
+        <div class="stat-intro"><span class="section-kicker">THE CORRECTED STUDY</span><h2>Roman Hinglish.<br>Factual summaries.</h2><p>Compare models and prompt styles on the same Latin-script Hinglish sources, then assess factuality separately from reference overlap.</p></div>
+        <article class="stat-card"><span class="stat-number">2</span><span class="stat-title">Models planned</span><span class="stat-detail">Same sources and<br>generation budget</span></article>
+        <article class="stat-card"><span class="stat-number">2</span><span class="stat-title">Prompt styles</span><span class="stat-detail">Standard vs<br>factuality-aware</span></article>
+        <article class="stat-card"><span class="stat-number">0</span><span class="stat-title">Corrected runs</span><span class="stat-detail">Waiting for GupShup<br>h2e access</span></article>
       </div>
     </section>
 
     <section class="section shell" id="findings">
       <div class="section-heading">
-        <div><span class="section-kicker">01 — BASELINE COMPARISON</span><h2>Code-mixing shifts<br>lexical overlap.</h2></div>
-        <p>On the same 500 paired examples, synthetic p100 summaries scored lower against the original Hindi references. ROUGE measures text overlap; this result does not measure factuality.</p>
+        <div><span class="section-kicker">PRIOR HINDI-SCRIPT EXPERIMENT</span><h2>Retained as<br>background only.</h2></div>
+        <p>The 500-item Hindi and synthetic p100 runs compare Hindi-script inputs. They are not a Roman-script Hinglish result. ROUGE measures reference overlap, not factuality.</p>
       </div>
       <div class="results-layout">
         <div class="chart-card">
-          <div class="card-topline"><span>ROUGE F1 · HINDI REFERENCE</span><span class="chart-legend"><i class="legend-hi"></i> Hindi <i class="legend-mix"></i> Synthetic p100</span></div>
+          <div class="card-topline"><span>PRIOR ROUGE F1 · HINDI REFERENCE</span><span class="chart-legend"><i class="legend-hi"></i> Hindi <i class="legend-mix"></i> Synthetic p100</span></div>
           <div class="bar-chart" role="img" aria-label="ROUGE F1: Hindi 37.24 versus synthetic p100 35.53 for ROUGE-1; Hindi 16.79 versus 15.24 for ROUGE-2; Hindi 31.20 versus 29.82 for ROUGE-L">
             <div class="chart-row"><span class="metric-label">ROUGE-1</span><div class="bars"><div class="bar-wrap" style="--w:93.1%"><span class="bar-value">37.24</span><div class="bar bar-hi"></div></div><div class="bar-wrap" style="--w:88.8%"><span class="bar-value">35.53</span><div class="bar bar-mix"></div></div></div><span class="delta">−1.71</span></div>
             <div class="chart-row"><span class="metric-label">ROUGE-2</span><div class="bars"><div class="bar-wrap" style="--w:42.0%"><span class="bar-value">16.79</span><div class="bar bar-hi"></div></div><div class="bar-wrap" style="--w:38.1%"><span class="bar-value">15.24</span><div class="bar bar-mix"></div></div></div><span class="delta">−1.55</span></div>
@@ -73,14 +74,15 @@
 
     <section class="research-section" aria-labelledby="research-title">
       <div class="shell">
-        <div class="section-heading research-heading"><div><span class="section-kicker">RESEARCH MATERIALS</span><h2 id="research-title">Choices made<br>for this study.</h2></div><p>Each resource serves a defined role in the experiment. The pilot holds its generator constant to compare prompts, while screening signals are treated as exploratory.</p></div>
+      <div class="section-heading research-heading"><div><span class="section-kicker">RESEARCH MATERIALS</span><h2 id="research-title">Choices made<br>for this study.</h2></div><p>The corrected design targets Roman-script Hinglish. Prior Hindi-script resources are retained as background; the new matched model and prompt comparison has not run yet.</p></div>
         <div class="research-grid">
           <article class="research-card"><span class="research-index">01 / DATASET</span><h3>XL-Sum Hindi</h3><p>A Hindi news summarization test set gives the baseline aligned source and reference summaries for a paired comparison.</p><a href="https://aclanthology.org/2021.findings-acl.413/" target="_blank" rel="noreferrer">Hasan et al. · Findings ACL 2021 ↗</a></article>
           <article class="research-card"><span class="research-index">02 / BASELINE</span><h3>mT5 multilingual XLSum</h3><p>A multilingual summarizer fine-tuned for XL-Sum provides a reproducible Hindi baseline. It is not a new model developed in this project.</p><a href="https://huggingface.co/csebuetnlp/mT5_multilingual_XLSum" target="_blank" rel="noreferrer">Checkpoint model card ↗</a></article>
-          <article class="research-card"><span class="research-index">03 / CODE-MIXED DATA</span><h3>Synthetic p100 + MUTANT</h3><p>Paired synthetic inputs isolate a controlled code-mixing condition; MUTANT adds naturally occurring Hinglish. Synthetic text is not a substitute for authentic code-mixing.</p><a href="https://aclanthology.org/2023.findings-eacl.56/" target="_blank" rel="noreferrer">Gupta et al. · Findings EACL 2023 ↗</a></article>
-          <article class="research-card"><span class="research-index">04 / PROMPT PILOT</span><h3>Qwen3-4B</h3><p>One generator is held fixed while standard and factuality-aware instructions are compared on matched sources. The pilot does not compare LLM families.</p><a href="https://huggingface.co/Qwen/Qwen3-4B" target="_blank" rel="noreferrer">Checkpoint model card ↗</a></article>
-          <article class="research-card"><span class="research-index">05 / AUTOMATED SCREEN</span><h3>mDeBERTa NLI</h3><p>Multilingual entailment scores provide a source-summary screening signal. Near-ceiling scores in this pilot limit their ability to distinguish outputs.</p><a href="https://huggingface.co/MoritzLaurer/mDeBERTa-v3-base-mnli-xnli" target="_blank" rel="noreferrer">Model card and training data ↗</a></article>
-          <article class="research-card research-card-note"><span class="research-index">METHOD INSPIRATION</span><h3>FactCC</h3><p>FactCC informs the source-grounded factuality-checking idea. Its English trained model is not used or claimed to validate Hindi results here.</p><a href="https://aclanthology.org/2020.emnlp-main.750/" target="_blank" rel="noreferrer">Kryściński et al. · EMNLP 2020 ↗</a></article>
+          <article class="research-card research-card-note"><span class="research-index">03 / TARGET DATA CANDIDATE</span><h3>GupShup h2e</h3><p>Romanized Hindi-English conversations paired with English summaries match the intended written style. The published corpus was manually translated from SAMSum rather than collected as natural chat.</p><a href="https://aclanthology.org/2021.emnlp-main.499/" target="_blank" rel="noreferrer">Mehnaz et al. · EMNLP 2021 ↗</a><a href="https://docs.google.com/forms/d/1zvUk7WcldVF3RCoHdWzQPzPprtSJClrnHoIOYbzaJEI/viewform?ts=61381ec0&amp;edit_requested=true" target="_blank" rel="noreferrer">Request dataset access ↗</a></article>
+          <article class="research-card"><span class="research-index">04 / PRIOR PILOT DATA</span><h3>MUTANT sample</h3><p>The previous local sample was Devanagari-dominant. Its pilot results are retained as exploratory history, not as the Roman-script target evaluation.</p><a href="https://aclanthology.org/2023.findings-eacl.56/" target="_blank" rel="noreferrer">Gupta et al. · Findings EACL 2023 ↗</a></article>
+          <article class="research-card"><span class="research-index">05 / PRIOR PILOT MODEL</span><h3>Qwen3-4B</h3><p>Used in the earlier two-prompt pilot. The corrected study will compare two models on identical sources and generation settings.</p><a href="https://huggingface.co/Qwen/Qwen3-4B" target="_blank" rel="noreferrer">Checkpoint model card ↗</a></article>
+          <article class="research-card"><span class="research-index">06 / SCREENING ONLY</span><h3>mDeBERTa NLI</h3><p>Prior multilingual entailment scores are automated screening signals, not factuality labels. Human review is required for the corrected sample.</p><a href="https://huggingface.co/MoritzLaurer/mDeBERTa-v3-base-mnli-xnli" target="_blank" rel="noreferrer">Model card and training data ↗</a></article>
+          <article class="research-card research-card-note"><span class="research-index">METHOD INSPIRATION</span><h3>FactCC</h3><p>FactCC informs source-grounded factuality checking. Its English trained model is not used to validate Roman-script Hinglish results.</p><a href="https://aclanthology.org/2020.emnlp-main.750/" target="_blank" rel="noreferrer">Kryściński et al. · EMNLP 2020 ↗</a></article>
         </div>
         <p class="research-credit">Dataset and checkpoint authors retain credit for the underlying resources. Project-specific data preparation, prompt comparison, audits, and reporting are documented separately.</p>
       </div>
@@ -88,10 +90,10 @@
 
     <section class="pilot-section" id="method">
       <div class="shell">
-        <div class="section-heading pilot-heading"><div><span class="section-kicker">02 — PROMPT PILOT</span><h2>Same sources.<br>Two instructions.</h2></div><p>Each source was summarized with a standard prompt and a factuality-aware prompt. Automated checks were used to screen and inspect the outputs.</p></div>
+        <div class="section-heading pilot-heading"><div><span class="section-kicker">PRIOR PILOT · SCRIPT MISMATCH</span><h2>Not target-style<br>evidence.</h2></div><p>The previous standard-vs-factuality-aware run used Devanagari-based sources. Its automated comparisons are shown for traceability only and do not evaluate Roman-script Hinglish.</p></div>
         <div class="pilot-grid">
           <div class="pilot-main">
-            <div class="pilot-controls" role="tablist" aria-label="Pilot condition">
+              <div class="pilot-controls" role="tablist" aria-label="Prior pilot condition">
               <button class="condition-tab active" role="tab" aria-selected="true" data-condition="all">All conditions <span>76 pairs</span></button>
               <button class="condition-tab" role="tab" aria-selected="false" data-condition="hindi">Hindi <span>23 pairs</span></button>
               <button class="condition-tab" role="tab" aria-selected="false" data-condition="synthetic">Synthetic p100 <span>23 pairs</span></button>
@@ -100,7 +102,7 @@
             <div class="pilot-panel">
               <div class="pilot-panel-head"><div><span class="section-kicker">MULTILINGUAL NLI · MEAN AWARE − STANDARD</span><h3 id="condition-title">Signals differ by condition</h3></div><span class="pilot-count" id="condition-count">76 matched pairs</span></div>
               <div class="nli-row"><div class="nli-label"><span>Mean max-entailment</span><span id="entailment-delta">Condition-level differences vary</span></div><div class="nli-track"><span class="nli-marker" id="entailment-marker" style="left:50%"></span></div><div class="nli-scale"><span>aware lower</span><span>no change</span><span>aware higher</span></div></div>
-              <div class="pilot-summary" id="pilot-summary">Across conditions, the median paired differences are close to zero. The NLI model’s overall median max-entailment is 0.9980, indicating ceiling saturation.</div>
+              <div class="pilot-summary" id="pilot-summary">This earlier screening run used Devanagari-based sources. Its median paired differences are close to zero and its scores are ceiling-saturated. Do not read it as a Roman-script Hinglish result.</div>
               <div class="pilot-caveat"><span class="caveat-icon">!</span><span>NLI entailment is an exploratory model score, not a calibrated factuality probability or a human label.</span></div>
             </div>
           </div>

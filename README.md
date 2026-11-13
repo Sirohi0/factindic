@@ -7,16 +7,25 @@ Semester project for NLP, Intelligent Model Design and MLOps (Bennett University
 
 Status updated 13 November 2026.
 
+**Dataset-scope correction:** the intended code-mixed target is Roman-script
+Hinglish (Hindi transliterated into Latin letters, mixed with English). An audit
+found that none of the 76 sources in the earlier prompt pilot used this script
+style; the pilot was Devanagari-based. Keep those results as exploratory prior
+work, not as evidence about Roman-script Hinglish. The corrected data plan and
+access requirement are documented in
+[`docs/dataset_scope_correction_2026-11-13.md`](docs/dataset_scope_correction_2026-11-13.md).
+
 The 500-example Hindi mT5 baseline and a paired synthetic p100 code-mix baseline are complete, with predictions, metrics, truncation analysis, and rule-based checks saved under `results/`. A paired bootstrap comparison against the same Hindi references is in `results/paired_baseline_comparison.md`.
 
-The controlled standard-vs-factuality-aware pilot has a 152-summary quality-filtered candidate, an assistant-only source-check pass, and a clean-source NLI re-score. Seven failed paired IDs were excluded symmetrically. Neither assistant screening nor NLI scores are human factuality labels. Human labels remain blank. The initial 28 terminal source-display markers were removed in a separate clean copy; row-by-row re-scoring found all NLI probabilities unchanged. See `results/factindic_interim_project_report_2026-11-13.md` and `results/ai_only_prompt_pilot_summary_2026-11-13.md`.
+The earlier controlled standard-vs-factuality-aware pilot has a 152-summary quality-filtered candidate, assistant-only source checks, and a clean-source NLI re-score. It does not match the intended Roman-script Hinglish style: all 76 unique sources are Devanagari-based. Keep these results exploratory and do not annotate the old review sheet as the target Hinglish evaluation. Neither assistant screening nor NLI scores are human factuality labels. See `docs/dataset_scope_correction_2026-11-13.md` before using prior code-mix results.
 
-The current 7-slide teacher deck is `FactIndic_Progress_Checkpoint_2026-11-13_NLI_rescored.pptx` in the project root. It reports AI-only results, the clean-source re-score, and the MUTANT provenance limitations; revise it after human labels if annotation is completed.
+The current teacher-facing scope correction is `FactIndic_Scope_Correction_2026-11-13.pptx` and `FactIndic_Scope_Correction_2026-11-13.pdf`. The older deck and supervisor brief describe the previous Devanagari-based scope. The corrected Roman-script Hinglish run is pending dataset access. See `docs/dataset_scope_correction_2026-11-13.md`.
 
 ## Foundation and attribution
 - Summarization baseline: XL-Sum Hindi data and the mT5_multilingual_XLSum
   checkpoint, by Hasan et al. (2021), BUET CSE NLP Group. Not my work.
-- Authentic code-mixed data: MUTANT (Gupta, Srivastava, and Singh, Findings of EACL 2023, DOI 10.18653/v1/2023.findings-eacl.56). The upstream dataset card declares CC BY 4.0. Of 50 PM-speech and Mankibaat candidates, 47 map uniquely by exact text match to an upstream file and 3 match two files; within the 30-example prompt pilot, 28 map uniquely and 2 are ambiguous. Original publisher/event URLs are not provided in the text files. See `scripts/map_mutant_provenance.py`, `results/mutant_source_provenance_audit_2026-11-13.md`, and `results/mutant_source_provenance_map_2026-11-13.csv`.
+- Earlier code-mix data exploration: MUTANT (Gupta, Srivastava, and Singh, Findings of EACL 2023, DOI 10.18653/v1/2023.findings-eacl.56). Its sampled items in this project are Devanagari-based, so they do not satisfy the corrected Roman-script Hinglish target. Of 50 PM-speech and Mankibaat candidates, 47 map uniquely by exact text match to an upstream file and 3 match two files; within the 30-example prompt pilot, 28 map uniquely and 2 are ambiguous. See `scripts/map_mutant_provenance.py` and `results/mutant_source_provenance_audit_2026-11-13.md`.
+- Corrected data candidate: GupShup h2e, Romanized Hindi-English conversations paired with English summaries. Access is gated; its translated-dialogue limitation and release terms are documented in `docs/dataset_scope_correction_2026-11-13.md`. No corrected target run has been completed yet.
 - Factuality methodology (later phase): inspired by factCC (Salesforce).
   I am adapting the idea, not using their trained English model.
 
@@ -56,13 +65,16 @@ in this repository. It does not run model inference or expose row-level data.
 | `scripts/` | `run_baseline.py`, `evaluate.py` |
 | `scripts/summarize_assistant_prompt_review.py` | Rebuilds the descriptive assistant-only comparison from the review CSV; does not produce factuality gold labels |
 | `scripts/analyze_nli_prompt_screening.py` | Verifies a Colab NLI ZIP against its input candidate and rebuilds matched prompt-arm score comparisons |
+| `scripts/audit_romanized_parallel.py` | Checks paired source/reference alignment and Roman/Devanagari script counts for private GupShup h2e files; it does not replace manual Hinglish review |
 | `results/<run>/` | Run metadata, metrics, predictions, and analysis artifacts |
 | `factindic_prompt_comparison_colab_revamped.ipynb` | Refreshed Colab prompt pilot with input checks, progress checkpoints, and diagnostic-vs-annotation export gating |
 | `docs/factuality_annotation_protocol.md` | Human factuality labels and adjudication guidance |
 | `docs/project_checkpoint_2026-11-13.md` | Current progress ladder, limitations, and next steps |
+| `docs/dataset_scope_correction_2026-11-13.md` | Corrected Roman-script Hinglish target, existing-data audit, and replacement plan |
 | `results/paired_baseline_comparison.md` | Paired ROUGE comparison with bootstrap intervals |
 | `results/prompt_pilot_nli_rescore_2026-11-13/` | Clean-source Colab re-score, archive, row-level audit, and comparison with the original run |
 | `results/factindic_interim_project_report_2026-11-13.md` | Current integrated project checkpoint and remaining work |
+| `FactIndic_Scope_Correction_2026-11-13.pptx` / `.pdf` | Teacher-facing explanation of the script mismatch and corrected experiment plan |
 | `results/factindic_checkpoint_for_maam_2026-11-13.pdf` | Two-page supervisor brief with workflow, results, model rationale, and limits |
 
 ## Prompt-pilot NLI screening

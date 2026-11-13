@@ -40,5 +40,7 @@ verify_setup.py
 # Only the current teacher deck and supervisor brief are intended for the public repo
 *.pptx
 !FactIndic_Progress_Checkpoint_2026-11-13_NLI_rescored.pptx
+!FactIndic_Scope_Correction_2026-11-13.pptx
 *.pdf
 !results/factindic_checkpoint_for_maam_2026-11-13.pdf
+!FactIndic_Scope_Correction_2026-11-13.pdf

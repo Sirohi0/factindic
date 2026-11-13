@@ -1,4 +1,6 @@
-# FactIndic prompt pilot — AI-only evidence summary
+# FactIndic previous prompt pilot — AI-only, script-mismatched exploratory summary
+
+> **Scope correction:** the intended code-mixed target is Roman-script Hinglish (Hindi transliterated into Latin letters, with English mixed in). The 76 unique sources summarized here are all Devanagari-based; none matches that target style. These findings are retained as exploratory prior work and must not be described as Roman-script Hinglish results. See [`docs/dataset_scope_correction_2026-11-13.md`](../docs/dataset_scope_correction_2026-11-13.md).
 
 **Status:** exploratory screening. Human factuality labels are blank; this report does not establish factual accuracy or a winning prompt.
 

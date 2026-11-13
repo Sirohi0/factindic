@@ -1,8 +1,14 @@
 # FactIndic development checkpoint — 13 November 2026
 
-## Current position
+## Critical scope correction — 13 November 2026
 
-The baseline experiments, controlled prompt pilot, assistant-only screening, clean-source NLI re-score, and MUTANT file-level provenance audit are complete. The project has a verified interim AI-only report and teacher-facing deck. Human factuality annotation has not been completed, so factuality-performance claims remain out of scope.
+The intended code-mixed target is Roman-script Hinglish: Hindi words transliterated into Latin characters, mixed with English. A script audit of the 76 unique sources in the earlier prompt pilot found Devanagari characters in all 76 and zero Roman-script Hinglish sources. Thus, the current prompt pilot and MUTANT sample do not test the intended input style. Preserve their results as exploratory, Devanagari-based prior work; do not present them as Roman-script Hinglish evidence or annotate the existing 152-row sheet as the target evaluation. The Hindi and synthetic p100 baselines remain useful for their original Hindi-script task.
+
+The recommended replacement is GupShup's h2e task: Romanized Hinglish conversations with English summaries. Its source paper says the conversations were manually translated from SAMSum, so it is suitable for Romanized Hinglish summarization but does not represent naturally collected chat. Dataset access is by request and carries a no-redistribution condition. The user must request access; the public repository must not contain the restricted corpus. See [dataset scope correction](dataset_scope_correction_2026-11-13.md).
+
+## Previous experimental position
+
+The previous-scope baseline experiments, controlled prompt pilot, assistant-only screening, clean-source NLI re-score, and MUTANT file-level provenance audit are complete. Human factuality annotation was not completed. Due to the script-style mismatch, the prior code-mixed findings are not final evidence for the intended Roman-script Hinglish task.
 
 ## Completed ladder
 
@@ -12,24 +18,34 @@ The baseline experiments, controlled prompt pilot, assistant-only screening, cle
 4. **Prompt pilot:** 152 summaries from 76 matched documents, with standard and factuality-aware prompts. Seven Hindi/synthetic pairs were excluded symmetrically after generation-quality failures.
 5. **Assistant/NLI screening:** 107 supported, 19 minor-error, and 26 major-error assistant flags. NLI medians are near 1.0, paired results vary by condition, and neither automated method establishes a prompt winner.
 6. **Source-display audit:** 28 terminal replacement markers in the initial source display were removed in a separate clean copy. The clean-source NLI re-score has no markers or hypothesis truncations; all NLI probability values and chunk/token indices match the earlier run.
-7. **Software and reporting:** 38 local unit tests pass. The integrated interim report, updated AI-only summary, clean-source audit, and revised 7-slide teacher deck are saved in the project.
+7. **Software and reporting:** 38 local unit tests pass. The integrated interim report, updated AI-only summary, clean-source audit, and corrected 7-slide scope deck are saved in the project.
 
-## What remains
+## Corrected development ladder
 
-- If a human factuality result is required, a person must review all 152 summaries against their sources in the blinded workbook. Do not copy assistant or NLI labels into human fields.
+1. **Request GupShup access:** complete the authors' access form, including the citation and no-redistribution agreements.
+2. **Audit the authorized `h2e` split:** run `scripts/audit_romanized_parallel.py` for pair alignment and script counts, manually inspect its private sample for real Hindi-English mixing, and verify split integrity and truncation. Do not use the unrelated Roman-script Gupshup chat corpus found elsewhere on the Hub.
+3. **Run a paired two-model, two-prompt comparison:** same official test sources for each model and prompt arm. Heavy generation stays in Colab.
+4. **Create a new blinded human factuality worksheet** for the corrected Roman-script sample. The old 152-row worksheet remains blank and is out of scope.
+5. **Evaluate separately:** reference-based summary quality; blinded human factuality; NLI as an exploratory signal only.
+6. **Revise the report, deck, and dashboard** to put the corrected experiment first and retain prior Hindi-script results as background.
+
+## What remains from the previous plan
+
+- For the corrected experiment, a person must review the newly generated summaries against their sources. Do not copy assistant or NLI labels into human fields.
 - Only one annotator is currently available; report the single-annotator limitation and do not claim inter-annotator agreement.
 - After labels are complete, unblind, compute per-condition and paired prompt comparisons, classify error types, and revise the report/deck.
-- If annotation is not feasible, present the project as an exploratory AI-only checkpoint and make no human-validated factuality claim.
+- If annotation is not feasible, present the corrected model comparison as an exploratory AI-only checkpoint and make no human-validated factuality claim.
 
 The 45-row assistant attention queue can help prioritize human review, but it does not replace reviewing the complete sample.
 
 ## Current files
 
 - Integrated report: `results/factindic_interim_project_report_2026-11-13.md`
-- Supervisor briefing PDF: `results/factindic_checkpoint_for_maam_2026-11-13.pdf`
+- Corrected teacher deck and brief: `FactIndic_Scope_Correction_2026-11-13.pptx` and `.pdf`
+- Previous-scope supervisor brief: `results/factindic_checkpoint_for_maam_2026-11-13.pdf` (do not present as Roman-script Hinglish evidence)
 - Prompt-pilot AI-only summary: `results/ai_only_prompt_pilot_summary_2026-11-13.md`
 - Paired baseline comparison: `results/paired_baseline_comparison.md`
 - Clean-source NLI audit: `results/prompt_pilot_nli_rescore_2026-11-13/nli_rescore_comparison_2026-11-13.md`
 - MUTANT provenance audit: `results/mutant_source_provenance_audit_2026-11-13.md`
 - Assistant attention queue: `results/prompt_pilot_review_candidate_2026-11-09/assistant_review_attention_queue_2026-11-13.csv`
-- Teacher deck: `FactIndic_Progress_Checkpoint_2026-11-13_NLI_rescored.pptx`
+- Previous-scope teacher deck: `FactIndic_Progress_Checkpoint_2026-11-13_NLI_rescored.pptx` (do not present as Roman-script Hinglish evidence)
