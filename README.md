@@ -37,6 +37,13 @@ python scripts/evaluate.py results/<run>/predictions.jsonl   # recompute metrics
 If `--device mps` fails on a Mac, use `--device cpu`. Runs are resumable: repeat
 the same command and finished documents are skipped.
 
+## Project frontend
+
+The lightweight, dependency-free project dashboard is in `frontend/`. Open
+`frontend/index.html` in a browser to preview it locally. It summarizes the
+current aggregate results and links readers back to the methods and limitations
+in this repository. It does not run model inference or expose row-level data.
+
 ## Layout
 | Path | Purpose |
 | --- | --- |
