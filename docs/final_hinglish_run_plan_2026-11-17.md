@@ -12,29 +12,27 @@ The dataset contains English news article text paired with Romanized Hinglish ve
 - Same Hinglish sources passed to Qwen3 1.7B and Qwen3 4B.
 - Each model uses a standard summarization prompt and a factuality-aware prompt, for 120 summaries total.
 - Greedy generation; models load sequentially in a Colab GPU runtime; outputs checkpoint privately in Google Drive.
-- A blinded private worksheet asks one human annotator to label factual support against each Hinglish source. The parallel English article is offered only as a reading aid.
-- Paired error-rate differences use the same source IDs and bootstrap confidence intervals. Results are exploratory and single-annotator.
+- The private worksheet was designed for a human annotator to label factual support against each Hinglish source. The parallel English article is a reading aid only. A later AI-assisted pass filled the review labels; this does not count as human annotation.
+- Paired error-rate differences use the same source IDs and bootstrap confidence intervals. The available comparisons are exploratory AI screening only.
 
 ## Current status
 
-- The final-run Colab notebook has been prepared at `factindic_final_open_hinglish_colab.ipynb`.
-- Notebook JSON and Python code cells were checked for validity and syntax.
-- No final generation has been run yet. The old Devanagari pilot is preserved as prior exploratory work and is not the corrected Roman-script result.
-- No source dataset or generated row-level content is committed to GitHub.
+- The final Colab run completed on a Tesla T4: 30 sources and 120 outputs across two Qwen3 sizes and two prompt styles.
+- The quality gate passed: 0 cap hits, empty outputs, replacement-character rows, or truncated sources; 2 outputs lacked terminal punctuation.
+- A source-grounded AI screening pass produced 19 supported, 27 minor-error, and 74 major-error labels. These are AI assessments, not human factuality labels.
+- The Colab aggregate ZIP initially called the review human-annotated. A corrected archive, `results/factindic_final_hinglish_AI_assessed_aggregate_results.zip`, now names the AI review explicitly; do not use the original archive as human results.
+- No row-level source, summary, or review data is committed to GitHub.
 
 ## Remaining steps
 
-1. In Colab, open the final notebook and select a GPU runtime.
-2. Run through the dataset preview and inspect the eight selected Hinglish examples. Confirm they match the intended Roman-script style, then set `SAMPLE_LANGUAGE_CHECKED = True`.
-3. Run the final generation cell. If the quality gate reports diagnostic-only, rerun the generation cell; invalid checkpoint rows are retried.
-4. Complete the 120-row blinded factuality sheet against the sources. Do not fill labels automatically or mark all outputs supported without checking.
-5. Upload the completed sheet to the notebook for unblinding and paired analysis.
-6. Update the project report, teacher slides, and frontend with the final measured results and the dataset limitations.
+1. Treat the AI counts and paired intervals as exploratory screening only; the confidence intervals do not establish a prompt winner.
+2. If a human factuality claim is required, a person must verify labels against each source; the AI sheet cannot satisfy this requirement.
+3. The report and frontend now show the corrected dataset, AI-only screening results, and limitations. Update the teacher slides with these results before presenting them.
 
 ## Limits to report
 
 - This is a 30-source pilot, not a broad benchmark.
 - Both models are from the Qwen3 family; it tests parameter scale, not architecture differences.
 - The Hinglish inputs are machine-generated and curated translations of English news text, not naturally authored Hinglish.
-- The corpus has no reference summaries, so this run evaluates factuality only and reports no ROUGE.
+- The corpus has no reference summaries, so this run reports no ROUGE. The factuality comparison is AI-assisted screening, not a verified human evaluation.
 - Factuality findings require completed, source-grounded human labels. Automatic quality gates do not establish factual support.

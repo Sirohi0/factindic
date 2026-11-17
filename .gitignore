@@ -44,3 +44,5 @@ verify_setup.py
 *.pdf
 !results/factindic_checkpoint_for_maam_2026-11-13.pdf
 !FactIndic_Scope_Correction_2026-11-13.pdf
+
+!FactIndic_Progress_Checkpoint_2026-11-17_AI_screening.pptx
