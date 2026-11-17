@@ -5,7 +5,11 @@ Semester project for NLP, Intelligent Model Design and MLOps (Bennett University
 
 ## Status
 
-Status updated 13 November 2026.
+Status updated 17 November 2026.
+
+[![Open final pilot in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Sirohi0/factindic/blob/main/factindic_final_open_hinglish_colab.ipynb)
+
+**Final-run plan (17 November):** the teacher confirmed that any dataset may be used. GupShup access has not been granted yet, so the final pilot is switching to the public `News_Hinglish_English` dataset to avoid blocking on a gated request. It contains Romanized Hinglish news text paired with the corresponding English article, but no gold summaries. The final study will therefore compare source-grounded human factuality labels only and will not report ROUGE. See [the final-run checkpoint](docs/final_hinglish_run_plan_2026-11-17.md) and run [`factindic_final_open_hinglish_colab.ipynb`](factindic_final_open_hinglish_colab.ipynb) in Colab. The notebook has not been run yet; the user must inspect the sampled examples, execute the GPU run, and complete the blinded factuality sheet before the project can claim measured factuality results.
 
 **Dataset-scope correction:** the intended code-mixed target is Roman-script
 Hinglish (Hindi transliterated into Latin letters, mixed with English). An audit
@@ -21,13 +25,14 @@ The earlier controlled standard-vs-factuality-aware pilot has a 152-summary qual
 
 The current teacher-facing scope correction is `FactIndic_Scope_Correction_2026-11-13.pptx` and `FactIndic_Scope_Correction_2026-11-13.pdf`. The older deck and supervisor brief describe the previous Devanagari-based scope. The corrected Roman-script Hinglish run is pending dataset access. See `docs/dataset_scope_correction_2026-11-13.md`.
 
-A corrected Colab experiment is prepared in `factindic_romanized_hinglish_colab.ipynb`. It uses a paired 2-model × 2-prompt pilot, a private blind factuality sheet, paired ROUGE summaries, and private storage for any GupShup text. Run it only after receiving dataset access and confirming that the translated conversation domain is acceptable to the teacher.
+A gated GupShup alternative remains in `factindic_romanized_hinglish_colab.ipynb`. The current final path is `factindic_final_open_hinglish_colab.ipynb`, which pins the public Romanized Hinglish news corpus, runs a paired two-size/two-prompt comparison, and exports a private blinded factuality worksheet. Since the corpus has no gold summaries, the notebook intentionally omits ROUGE.
 
 ## Foundation and attribution
 - Summarization baseline: XL-Sum Hindi data and the mT5_multilingual_XLSum
   checkpoint, by Hasan et al. (2021), BUET CSE NLP Group. Not my work.
 - Earlier code-mix data exploration: MUTANT (Gupta, Srivastava, and Singh, Findings of EACL 2023, DOI 10.18653/v1/2023.findings-eacl.56). Its sampled items in this project are Devanagari-based, so they do not satisfy the corrected Roman-script Hinglish target. Of 50 PM-speech and Mankibaat candidates, 47 map uniquely by exact text match to an upstream file and 3 match two files; within the 30-example prompt pilot, 28 map uniquely and 2 are ambiguous. See `scripts/map_mutant_provenance.py` and `results/mutant_source_provenance_audit_2026-11-13.md`.
-- Corrected data candidate: GupShup h2e, Romanized Hindi-English conversations paired with English summaries. Access is gated; its translated-dialogue limitation and release terms are documented in `docs/dataset_scope_correction_2026-11-13.md`. No corrected target run has been completed yet.
+- GupShup h2e remains a better fit if access is granted because it includes reference summaries; its access request is pending and no data is present locally.
+- Current final data path: `suyash2739/News_Hinglish_English`, a public English/Romanized-Hinglish news parallel corpus, pinned in the final Colab notebook. The Hinglish side is machine-generated and curated, and the dataset contains translations rather than summary references. No final generation run or human factuality review has been completed.
 - Factuality methodology (later phase): inspired by factCC (Salesforce).
   I am adapting the idea, not using their trained English model.
 
@@ -71,6 +76,7 @@ in this repository. It does not run model inference or expose row-level data.
 | `results/<run>/` | Run metadata, metrics, predictions, and analysis artifacts |
 | `factindic_prompt_comparison_colab_revamped.ipynb` | Refreshed Colab prompt pilot with input checks, progress checkpoints, and diagnostic-vs-annotation export gating |
 | `factindic_romanized_hinglish_colab.ipynb` | Corrected GupShup h2e Roman-script pilot: 30 paired test sources, two multilingual 4B models, two prompts, blind human factuality review, paired ROUGE bootstrap |
+| `factindic_final_open_hinglish_colab.ipynb` | Current final-run Colab: 30 Roman-script Hinglish news inputs × two Qwen3 sizes × two prompts, private human factuality review, no ROUGE because no gold summaries |
 | `docs/factuality_annotation_protocol.md` | Human factuality labels and adjudication guidance |
 | `docs/project_checkpoint_2026-11-13.md` | Current progress ladder, limitations, and next steps |
 | `docs/dataset_scope_correction_2026-11-13.md` | Corrected Roman-script Hinglish target, existing-data audit, and replacement plan |

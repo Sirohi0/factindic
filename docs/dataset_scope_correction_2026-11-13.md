@@ -2,6 +2,10 @@
 
 **Status:** the current code-mixed experiments do not match the intended Roman-script Hinglish target. Keep the old outputs for audit and describe them as preliminary script-mixed experiments. Do not use the current human-review workbook as the main Hinglish factuality evaluation.
 
+## Update — 17 November 2026
+
+The teacher confirmed that any dataset may be used. The GupShup form was submitted, but its confirmation page only says the response was recorded; access has not been verified. To avoid blocking the final pilot, the current plan uses the public `News_Hinglish_English` corpus and its Romanized Hinglish text paired with English news articles. It has no gold summaries, so the study will measure source-grounded human factuality only and omit ROUGE. See `final_hinglish_run_plan_2026-11-17.md`.
+
 ## Intended input style
 
 The project should focus on Hindi-English Hinglish written in Latin/Roman characters: Hindi words transliterated into the English alphabet, with English words and phrases mixed in. The example that motivated this correction is “Hindi is a Bharatiya bhaasha, it is ek aisi bhasha jo poore india me boli jaati hai.”
