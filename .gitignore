@@ -6,6 +6,8 @@ __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
 .DS_Store
+/macos/FactIndicApp/FactIndic.app/
+/macos/FactIndicApp/.build/
 
 # Local setup snapshots and one-off model download check
 .env
