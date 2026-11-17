@@ -4,3 +4,12 @@
 @media(max-width:900px){.research-card{padding:17px 15px;min-height:220px}}
 @media(max-width:680px){.research-section{padding:66px 0 59px}.research-grid{grid-template-columns:1fr 1fr}.research-card{min-height:230px;padding:15px 12px}.research-card h3{font-size:15px;margin-top:14px}.research-card p{font-size:9px}.research-credit{font-size:8px}}
 @media(max-width:680px){.scope-alert{grid-template-columns:22px 1fr;margin-top:10px;margin-bottom:-28px;padding:10px}.scope-alert p{font-size:9px}.scope-alert a{grid-column:2;justify-self:start}}
+
+/* Keyboard and motion accessibility */
+.skip-link { position:fixed; top:10px; left:10px; z-index:100; transform:translateY(-160%); padding:12px 16px; border-radius:6px; background:var(--dark); color:#fff; font-weight:700; }
+.skip-link:focus { transform:translateY(0); }
+:focus-visible { outline:3px solid #b45c35; outline-offset:4px; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior:auto; }
+  *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+}

@@ -57,8 +57,15 @@ the same command and finished documents are skipped.
 
 The lightweight, dependency-free project dashboard is in `frontend/`. Open
 `frontend/index.html` in a browser to preview it locally. It summarizes the
-current aggregate results and links readers back to the methods and limitations
-in this repository. It does not run model inference or expose row-level data.
+final 30-source Roman-script Hinglish pilot and links to the methods and
+limitations. The factuality labels are explicitly AI-assisted screening, not
+human-verified results. The site does not run model inference or expose
+row-level data.
+
+GitHub Pages deployment is configured in `.github/workflows/publish-site.yml`.
+To publish it, set the repository's **Settings → Pages → Build and deployment →
+Source** to **GitHub Actions**. The workflow deploys `frontend/` when changes
+are pushed to `main`; it can also be started from the Actions tab.
 
 ## Layout
 | Path | Purpose |

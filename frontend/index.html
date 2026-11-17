@@ -4,7 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f6f5f1">
-  <meta name="description" content="FactIndic studies factuality-aware summarization for Hindi and code-mixed text.">
+  <meta name="description" content="FactIndic is an exploratory study of factuality-aware summarization for Roman-script Hinglish, with results clearly marked as AI-assisted screening.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="FactIndic — Summarization for Roman-script Hinglish">
+  <meta property="og:description" content="An exploratory comparison of two Qwen3 models and two prompt styles on 30 Romanized Hinglish news sources.">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <title>FactIndic — Factuality-aware summarization</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,6 +19,7 @@
   <script src="app.js" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#study">Skip to content</a>
   <header class="topbar">
     <a class="brand" href="#top" aria-label="FactIndic home"><span class="brand-mark">F<span>.</span></span><span>FactIndic</span></a>
     <nav aria-label="Main navigation">
@@ -23,18 +29,18 @@
   </header>
 
   <main id="top">
-    <aside class="scope-alert shell" aria-label="Dataset and evidence note"><span class="scope-alert-icon">!</span><p><strong>Corrected Roman-script pilot completed.</strong> The Hinglish text is machine-generated and curated from English news articles, not naturally authored. Factuality results below are AI-assisted screening only; human validation has not started.</p><a href="https://github.com/Sirohi0/factindic/blob/main/docs/final_hinglish_ai_screening_report_2026-11-17.md" target="_blank" rel="noreferrer">Read methods and limits ↗</a></aside>
+    <aside class="scope-alert shell" aria-label="Dataset and evidence note"><span class="scope-alert-icon">!</span><p><strong>Corrected Roman-script pilot completed.</strong> The Hinglish text is machine-generated and curated from English news articles, not naturally authored. Factuality results below are AI-assisted screening only; independent human validation is future work.</p><a href="https://github.com/Sirohi0/factindic/blob/main/docs/final_hinglish_ai_screening_report_2026-11-17.md" target="_blank" rel="noreferrer">Read methods and limits ↗</a></aside>
     <section class="hero shell">
       <div class="hero-copy">
         <div class="eyebrow"><span class="pulse"></span> NLP research project <span class="eyebrow-divider">/</span> 2026</div>
         <h1>Summaries should<br>stay <em>true to the source.</em></h1>
         <p class="hero-lede">FactIndic studies whether factuality-aware prompting helps LLMs summarize Roman-script Hinglish: Hindi words written in Latin letters and mixed with English.</p>
         <div class="hero-actions"><a class="button button-dark" href="#final-pilot">Explore the findings <span>↓</span></a><a class="text-link" href="https://github.com/Sirohi0/factindic/blob/main/docs/final_hinglish_ai_screening_report_2026-11-17.md" target="_blank" rel="noreferrer">Read pilot report <span>↗</span></a></div>
-        <div class="hero-note"><span class="note-icon">i</span><span>Generation and AI screening are complete. Human factuality validation remains pending.</span></div>
+        <div class="hero-note"><span class="note-icon">i</span><span>Exploratory run complete. Findings are AI-screened; independent human validation is future work.</span></div>
       </div>
       <div class="hero-visual" aria-label="Three text streams combining into a grounded summary illustration">
         <div class="visual-orbit orbit-one"></div><div class="visual-orbit orbit-two"></div>
-        <div class="visual-label label-hi">हिन्दी <span>Hindi</span></div><div class="visual-label label-en">EN <span>English</span></div><div class="visual-label label-mix">हि + EN <span>Code-mix</span></div>
+        <div class="visual-label label-hi">namaste <span>Hindi · Latin</span></div><div class="visual-label label-en">hello <span>English</span></div><div class="visual-label label-mix">Hinglish <span>Roman script</span></div>
         <div class="visual-core"><div class="core-spark">✳</div><div class="core-title">source<br>grounded</div><div class="core-caption">summary</div></div>
         <span class="visual-dot dot-a"></span><span class="visual-dot dot-b"></span><span class="visual-dot dot-c"></span>
         <div class="visual-caption"><span class="caption-line"></span>One source. A claim-preserving summary.</div>
@@ -62,7 +68,7 @@
         <article class="final-result-card"><span class="research-index">QWEN3 · 4B · STANDARD</span><div class="final-result-number">80.0%</div><p>AI-assessed summaries with a minor or major error</p><small>6 supported · 9 minor · 15 major / 30</small></article>
         <article class="final-result-card"><span class="research-index">QWEN3 · 4B · FACTUALITY-AWARE</span><div class="final-result-number">76.7%</div><p>AI-assessed summaries with a minor or major error</p><small>7 supported · 6 minor · 17 major / 30</small></article>
       </div>
-      <div class="final-pilot-note"><strong>Interpret with care.</strong> Paired bootstrap intervals for the prompt comparisons include zero, so the pilot does not establish a prompt winner. Human review is still needed before making a verified factuality claim. The dataset has no gold summaries; ROUGE was not calculated. <a href="https://github.com/Sirohi0/factindic/blob/main/docs/final_hinglish_ai_screening_report_2026-11-17.md">Full AI-screening report ↗</a></div>
+      <div class="final-pilot-note"><strong>Interpret with care.</strong> Paired bootstrap intervals for the prompt comparisons include zero, so the pilot does not establish a prompt winner. Independent human review is future work before any human-verified factuality claim. The dataset has no gold summaries; ROUGE was not calculated. <a href="https://github.com/Sirohi0/factindic/blob/main/docs/final_hinglish_ai_screening_report_2026-11-17.md">Full AI-screening report ↗</a></div>
     </section>
 
     <section class="section shell" id="findings">
@@ -131,7 +137,7 @@
         <article class="flow-step"><span class="step-no">01</span><span class="step-icon">▤</span><h3>Prepare data</h3><p>Thirty public English/Romanized-Hinglish news pairs, pinned to a dataset revision.</p><span class="step-arrow">→</span></article>
         <article class="flow-step"><span class="step-no">02</span><span class="step-icon">✳</span><h3>Generate</h3><p>Two Qwen3 sizes and two prompt styles on the same 30 sources.</p><span class="step-arrow">→</span></article>
         <article class="flow-step"><span class="step-no">03</span><span class="step-icon">⌁</span><h3>Screen</h3><p>Quality gate and AI-assisted source comparison; no ROUGE because gold summaries are absent.</p><span class="step-arrow">→</span></article>
-        <article class="flow-step flow-pending"><span class="step-no">04</span><span class="step-icon">◎</span><h3>Human validation</h3><p>Verify the AI screening labels against the source before reporting human factuality results.</p><span class="pending-pill">PENDING</span></article>
+        <article class="flow-step flow-pending"><span class="step-no">04</span><span class="step-icon">◎</span><h3>Independent validation</h3><p>Future work: have a human verify the AI screening labels before making human-validated factuality claims.</p><span class="pending-pill">FUTURE WORK</span></article>
       </div>
     </section>
 
