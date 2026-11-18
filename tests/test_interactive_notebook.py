@@ -86,3 +86,36 @@ def test_single_date_mismatch_is_corrected_only_when_unambiguous():
     assert namespace["unsupported_full_dates"](
         ambiguous_source, "The first event occurred on September 23, 2023."
     ) == ["September 23, 2023"]
+
+
+def test_claim_checker_cannot_assert_numbers_absent_from_summary():
+    helpers = next(source for source in _python_cells() if "def check_claims(" in source)
+    tree = ast.parse(helpers)
+    needed = {
+        "normalize_quote", "parse_json_object", "parse_claim_payload", "check_claims",
+        "numeric_tokens", "factuality_summary",
+    }
+    selected = [
+        node for node in tree.body
+        if isinstance(node, ast.FunctionDef) and node.name in needed
+    ]
+    namespace = {
+        "json": json,
+        "re": __import__("re"),
+        "ast": ast,
+        "unicodedata": __import__("unicodedata"),
+        "CLAIM_CHECK_TOKEN_LIMIT": 768,
+    }
+    exec(compile(ast.Module(body=selected, type_ignores=[]), "<claim-consistency>", "exec"), namespace)
+    raw = json.dumps({"claims": [
+        {"claim": "Chandrayaan-2 landed on 23 August 2023", "status": "supported", "evidence": "Vikram landed"},
+        {"claim": "Chandrayaan-1 landed on 31 July 1923", "status": "supported", "evidence": "Vikram landed"},
+    ]})
+    namespace["chat_generate"] = lambda *args: (raw, 20, 1.0)
+    source = "Chandrayaan-3's Vikram lander landed on 23 August 2023."
+    summary = "Chandrayaan-3's Vikram lander landed on 23 August 2023."
+    claims, *_ = namespace["check_claims"](source, summary, None, None)
+    assert [claim["assessment"] for claim in claims] == ["checker_mismatch", "checker_mismatch"]
+    assert [claim["claim_numbers_not_in_summary"] for claim in claims] == [["2"], ["1", "1923", "31"]]
+    assert "unreliable" in namespace["factuality_summary"](claims)
+    assert all(not claim["source_evidence"] for claim in claims)
