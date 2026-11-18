@@ -1,9 +1,10 @@
 # FactIndic for macOS
 
-A native SwiftUI viewer for the completed exploratory pilot. It shows the four
-model/prompt result groups and project methods without running inference or
-requiring internet access. Factuality labels are AI-screened; human verification
-was skipped for this version.
+A native SwiftUI viewer for the project results. It shows the paired Hindi
+baseline comparison, the four Roman-script Hinglish model/prompt groups, and
+project methods without running inference or requiring internet access.
+Factuality labels are AI-screened; human verification was skipped for this
+version.
 
 ## Run
 

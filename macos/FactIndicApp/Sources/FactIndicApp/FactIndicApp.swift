@@ -26,6 +26,7 @@ private enum Palette {
 
 private enum AppPage: String, CaseIterable, Identifiable {
     case overview = "Overview"
+    case baselines = "Hindi baselines"
     case results = "Pilot results"
     case method = "Method & limits"
 
@@ -34,6 +35,7 @@ private enum AppPage: String, CaseIterable, Identifiable {
     var symbol: String {
         switch self {
         case .overview: "square.grid.2x2"
+        case .baselines: "chart.xyaxis.line"
         case .results: "chart.bar.xaxis"
         case .method: "text.book.closed"
         }
@@ -109,6 +111,7 @@ private struct FactIndicWindow: View {
             Group {
                 switch page ?? .overview {
                 case .overview: OverviewPage { page = .results }
+                case .baselines: BaselinePage()
                 case .results: ResultsPage()
                 case .method: MethodPage()
                 }
@@ -117,6 +120,77 @@ private struct FactIndicWindow: View {
             .background(Palette.background)
         }
         .tint(Palette.green)
+    }
+}
+
+private struct BaselinePage: View {
+    private let rows: [(String, String, String, String)] = [
+        ("ROUGE-1 F1", "37.24", "33.97", "−1.71 pp"),
+        ("ROUGE-2 F1", "16.79", "13.68", "−1.55 pp"),
+        ("ROUGE-L F1", "31.20", "28.55", "−1.38 pp"),
+    ]
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 22) {
+                HeaderTag(text: "500 MATCHED HINDI TEST ARTICLES")
+                Text("Hindi baselines")
+                    .font(.system(size: 34, weight: .bold, design: .rounded))
+                    .tracking(-1)
+                Text("The same mT5 XL-Sum model summarized the original Hindi articles and a synthetic p100 code-mixed version. Both outputs use the same Hindi references.")
+                    .font(.system(size: 13))
+                    .foregroundStyle(Palette.muted)
+                    .lineSpacing(4)
+                    .frame(maxWidth: 760, alignment: .leading)
+
+                HStack(spacing: 14) {
+                    MetricCard(value: "500", title: "Matched articles", detail: "Same article IDs in both conditions")
+                    MetricCard(value: "1.86 s", title: "Hindi inference", detail: "Mean time per document")
+                    MetricCard(value: "1.90 s", title: "p100 inference", detail: "Mean time per document")
+                }
+
+                VStack(spacing: 0) {
+                    HStack {
+                        Text("METRIC")
+                        Spacer()
+                        Text("HINDI").frame(width: 110, alignment: .trailing)
+                        Text("SYNTHETIC P100").frame(width: 150, alignment: .trailing)
+                        Text("PAIRED CHANGE").frame(width: 140, alignment: .trailing)
+                    }
+                    .font(.system(size: 9, weight: .bold, design: .monospaced))
+                    .tracking(0.5)
+                    .foregroundStyle(Palette.muted)
+                    .padding(15)
+                    ForEach(Array(rows.enumerated()), id: \.offset) { index, row in
+                        HStack {
+                            Text(row.0).font(.system(size: 13, weight: .semibold))
+                            Spacer()
+                            Text(row.1).frame(width: 110, alignment: .trailing)
+                            Text(row.2).frame(width: 150, alignment: .trailing)
+                            Text(row.3).frame(width: 140, alignment: .trailing)
+                        }
+                        .font(.system(size: 12, design: .monospaced))
+                        .padding(.horizontal, 15)
+                        .padding(.vertical, 14)
+                        if index < rows.count - 1 { Divider().padding(.horizontal, 15) }
+                    }
+                }
+                .background(Palette.surface, in: RoundedRectangle(cornerRadius: 15))
+                .overlay(RoundedRectangle(cornerRadius: 15).stroke(Palette.line, lineWidth: 1))
+
+                NoticeCard(
+                    title: "Lexical overlap fell under synthetic mixing",
+                    message: "Paired bootstrap intervals excluded zero for all three ROUGE F1 changes. This measures overlap with Hindi references; it does not measure factuality or predict performance on naturally authored Hinglish.",
+                    tone: .amber
+                )
+                Text("Truncation status matched for 491 of 500 pairs. The Hindi run marked 364 inputs truncated and the p100 run marked 355. Both used a 512-token source limit.")
+                    .font(.system(size: 12))
+                    .foregroundStyle(Palette.muted)
+                    .lineSpacing(4)
+            }
+            .padding(30)
+            .frame(maxWidth: 980, alignment: .leading)
+        }
     }
 }
 
