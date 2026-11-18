@@ -42,6 +42,12 @@ Baseline evaluation, error analysis, a Hindi/code-mixed factuality
 verification approach, and MLOps tooling. Everything beyond the
 foundation above is documented as my own work as it is done.
 
+## Live project evaluation
+
+Use the [interactive FactIndic Colab notebook](https://colab.research.google.com/github/Sirohi0/factindic/blob/main/factindic_interactive_evaluation_colab.ipynb) to test one source at a time. Select a T4 GPU runtime, run its cells, paste Roman-script Hinglish text, and choose **Summarize and check claims**. It returns an English summary and a claim table with AI assessments and source quotes. The code checks that accepted quotes appear in the model-visible source. The model’s support judgment is still AI-assisted and unvalidated, so treat the output as a review aid.
+
+The fixed 30-source research comparison is in the [final experiment notebook](https://colab.research.google.com/github/Sirohi0/factindic/blob/main/factindic_final_open_hinglish_colab.ipynb). The Mac app is a local results viewer; the interactive evaluation runs in Colab.
+
 ## Quick start
 ```bash
 python -m venv .venv && source .venv/bin/activate
@@ -85,6 +91,7 @@ open macos/FactIndicApp/FactIndic.app
 | `factindic_prompt_comparison_colab_revamped.ipynb` | Refreshed Colab prompt pilot with input checks, progress checkpoints, and diagnostic-vs-annotation export gating |
 | `factindic_romanized_hinglish_colab.ipynb` | Corrected GupShup h2e Roman-script pilot: 30 paired test sources, two multilingual 4B models, two prompts, blind human factuality review, paired ROUGE bootstrap |
 | `factindic_final_open_hinglish_colab.ipynb` | Final-run Colab: 30 Roman-script Hinglish news inputs × two Qwen3 sizes × two prompts, private review workflow, per-condition generation metrics, no ROUGE because no gold summaries |
+| `factindic_interactive_evaluation_colab.ipynb` | Live Colab demonstration: paste one Roman-script Hinglish source, generate an English summary, and inspect claim-level source evidence |
 | `docs/factuality_annotation_protocol.md` | Human factuality labels and adjudication guidance |
 | `docs/project_checkpoint_2026-11-13.md` | Current progress ladder, limitations, and next steps |
 | `docs/dataset_scope_correction_2026-11-13.md` | Corrected Roman-script Hinglish target, existing-data audit, and replacement plan |
