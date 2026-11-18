@@ -132,3 +132,29 @@ def test_summary_is_labeled_unverified_when_evidence_is_unclear_or_unavailable()
     assert needs_review([{"assessment": "supported", "quote_found_in_model_input": True}], date_correction={"source_date": "23 August 2023"})
     assert needs_review([], claim_check_error="bad JSON")
     assert not needs_review([{"assessment": "supported", "quote_found_in_model_input": True}])
+
+
+def test_source_name_spelling_correction_uses_unique_source_identifiers():
+    helpers = next(source for source in _python_cells() if "def correct_source_name_spellings(" in source)
+    tree = ast.parse(helpers)
+    selected = []
+    for node in tree.body:
+        if isinstance(node, ast.FunctionDef) and node.name in {"_identifier_number", "_entity_parts", "correct_source_name_spellings"}:
+            selected.append(node)
+    namespace = {"re": __import__("re"), "difflib": __import__("difflib")}
+    exec(compile(ast.Module(body=selected, type_ignores=[]), "<name-correction>", "exec"), namespace)
+    source = "Chandrayaan-3 ka Vikram lander tha. Iske baad Pragyan rover lunar surface par utara."
+    summary = "Chandryaan-III's Vikram lands; Pragyaan rover arrives."
+    corrected, changes = namespace["correct_source_name_spellings"](source, summary)
+    assert "Chandrayaan-3" in corrected
+    assert "Pragyan rover" in corrected
+    assert {item["source_name"] for item in changes} == {"Chandrayaan-3", "Pragyan"}
+
+
+def test_numeric_tokens_normalize_fullwidth_digits():
+    helpers = next(source for source in _python_cells() if "def numeric_tokens(" in source)
+    tree = ast.parse(helpers)
+    function = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == "numeric_tokens")
+    namespace = {"re": __import__("re"), "unicodedata": __import__("unicodedata")}
+    exec(compile(ast.Module(body=[function], type_ignores=[]), "<number-normalization>", "exec"), namespace)
+    assert namespace["numeric_tokens"]("mission ３ on 23 August 2023") == ["3", "23", "2023"]
