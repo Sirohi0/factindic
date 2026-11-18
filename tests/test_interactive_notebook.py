@@ -158,3 +158,65 @@ def test_numeric_tokens_normalize_fullwidth_digits():
     namespace = {"re": __import__("re"), "unicodedata": __import__("unicodedata")}
     exec(compile(ast.Module(body=[function], type_ignores=[]), "<number-normalization>", "exec"), namespace)
     assert namespace["numeric_tokens"]("mission ３ on 23 August 2023") == ["3", "23", "2023"]
+
+
+def test_all_called_notebook_helpers_are_defined():
+    import builtins
+
+    combined = "\n".join(
+        source for source in _python_cells() if not source.lstrip().startswith("%")
+    )
+    tree = ast.parse(combined)
+    defined = set(dir(builtins))
+    for node in tree.body:
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            defined.add(node.name)
+        elif isinstance(node, ast.Assign):
+            for target in node.targets:
+                if isinstance(target, ast.Name):
+                    defined.add(target.id)
+        elif isinstance(node, (ast.Import, ast.ImportFrom)):
+            for alias in node.names:
+                defined.add(alias.asname or alias.name.split(".")[0])
+
+    undefined = set()
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            local_names = {arg.arg for arg in node.args.args}
+            for inner in ast.walk(node):
+                if isinstance(inner, ast.Assign):
+                    for target in inner.targets:
+                        if isinstance(target, ast.Name):
+                            local_names.add(target.id)
+                        elif isinstance(target, ast.Tuple):
+                            for elt in target.elts:
+                                if isinstance(elt, ast.Name):
+                                    local_names.add(elt.id)
+            for inner in ast.walk(node):
+                if isinstance(inner, ast.Call) and isinstance(inner.func, ast.Name):
+                    if inner.func.id not in defined and inner.func.id not in local_names:
+                        undefined.add(inner.func.id)
+    assert not undefined, f"Undefined helper calls in notebook: {sorted(undefined)}"
+
+
+def test_chat_generate_does_not_block_repeated_ngrams():
+    helpers = next(source for source in _python_cells() if "def chat_generate(" in source)
+    assert "no_repeat_ngram_size" not in helpers
+    assert "repetition_penalty" not in helpers
+
+
+def test_summary_requires_review_when_nli_flags_contradiction():
+    helpers = next(source for source in _python_cells() if "def summary_requires_review(" in source)
+    tree = ast.parse(helpers)
+    function = next(
+        node for node in tree.body
+        if isinstance(node, ast.FunctionDef) and node.name == "summary_requires_review"
+    )
+    namespace = {}
+    exec(compile(ast.Module(body=[function], type_ignores=[]), "<nli-review>", "exec"), namespace)
+    needs_review = namespace["summary_requires_review"]
+    assert needs_review([{
+        "assessment": "supported",
+        "quote_found_in_model_input": True,
+        "independent_nli_label": "contradiction",
+    }])
