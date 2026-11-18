@@ -28,6 +28,7 @@ private enum AppPage: String, CaseIterable, Identifiable {
     case overview = "Overview"
     case baselines = "Hindi baselines"
     case results = "Pilot results"
+    case generation = "Generation metrics"
     case method = "Method & limits"
 
     var id: String { rawValue }
@@ -37,6 +38,7 @@ private enum AppPage: String, CaseIterable, Identifiable {
         case .overview: "square.grid.2x2"
         case .baselines: "chart.xyaxis.line"
         case .results: "chart.bar.xaxis"
+        case .generation: "clock"
         case .method: "text.book.closed"
         }
     }
@@ -58,6 +60,24 @@ private struct PilotResult: Identifiable {
         .init(model: "Qwen3 · 1.7B", prompt: "Factuality-aware", supported: 4, minor: 8, major: 18),
         .init(model: "Qwen3 · 4B", prompt: "Standard", supported: 6, minor: 9, major: 15),
         .init(model: "Qwen3 · 4B", prompt: "Factuality-aware", supported: 7, minor: 6, major: 17)
+    ]
+}
+
+private struct GenerationCondition: Identifiable {
+    let model: String
+    let prompt: String
+    let meanWords: String
+    let meanCompression: String
+    let corpusCompression: String
+    let meanSeconds: String
+
+    var id: String { "\(model)-\(prompt)" }
+
+    static let all: [GenerationCondition] = [
+        .init(model: "Qwen3 · 1.7B", prompt: "Standard", meanWords: "53.77", meanCompression: "0.7702", corpusCompression: "0.7696", meanSeconds: "4.540"),
+        .init(model: "Qwen3 · 1.7B", prompt: "Factuality-aware", meanWords: "46.70", meanCompression: "0.6752", corpusCompression: "0.6684", meanSeconds: "3.032"),
+        .init(model: "Qwen3 · 4B", prompt: "Standard", meanWords: "54.10", meanCompression: "0.7829", corpusCompression: "0.7743", meanSeconds: "4.750"),
+        .init(model: "Qwen3 · 4B", prompt: "Factuality-aware", meanWords: "49.30", meanCompression: "0.7101", corpusCompression: "0.7056", meanSeconds: "4.126")
     ]
 }
 
@@ -113,6 +133,7 @@ private struct FactIndicWindow: View {
                 case .overview: OverviewPage { page = .results }
                 case .baselines: BaselinePage()
                 case .results: ResultsPage()
+                case .generation: GenerationMetricsPage()
                 case .method: MethodPage()
                 }
             }
@@ -251,6 +272,84 @@ private struct OverviewPage: View {
             }
             .padding(30)
             .frame(maxWidth: 980, alignment: .leading)
+        }
+    }
+}
+
+private struct GenerationMetricsPage: View {
+    private let columns: [(String, CGFloat)] = [
+        ("MODEL", 140), ("PROMPT", 165), ("MEAN WORDS", 110),
+        ("MEAN COMPRESSION", 145), ("CORPUS COMPRESSION", 150), ("MEAN SECONDS", 120)
+    ]
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 22) {
+                HeaderTag(text: "FINAL COLAB RUN · 30 OUTPUTS PER CONDITION")
+                Text("Generation metrics")
+                    .font(.system(size: 34, weight: .bold, design: .rounded))
+                    .tracking(-1)
+                Text("Descriptive length, compression, and timing from the completed 120-summary run. Each condition used the same 30 source articles.")
+                    .font(.system(size: 13))
+                    .foregroundStyle(Palette.muted)
+                    .lineSpacing(4)
+                    .frame(maxWidth: 760, alignment: .leading)
+
+                ScrollView(.horizontal) {
+                    VStack(spacing: 0) {
+                        HStack(spacing: 12) {
+                            ForEach(columns, id: \.0) { title, width in
+                                Text(title)
+                                    .font(.system(size: 9, weight: .bold, design: .monospaced))
+                                    .tracking(0.4)
+                                    .foregroundStyle(Palette.muted)
+                                    .frame(width: width, alignment: title == "MODEL" || title == "PROMPT" ? .leading : .trailing)
+                            }
+                        }
+                        .padding(15)
+                        ForEach(GenerationCondition.all) { row in
+                            HStack(spacing: 12) {
+                                Text(row.model).frame(width: columns[0].1, alignment: .leading)
+                                Text(row.prompt).frame(width: columns[1].1, alignment: .leading)
+                                Text(row.meanWords).frame(width: columns[2].1, alignment: .trailing)
+                                Text(row.meanCompression).frame(width: columns[3].1, alignment: .trailing)
+                                Text(row.corpusCompression).frame(width: columns[4].1, alignment: .trailing)
+                                Text(row.meanSeconds).frame(width: columns[5].1, alignment: .trailing)
+                            }
+                            .font(.system(size: 12, design: .monospaced))
+                            .padding(.horizontal, 15)
+                            .padding(.vertical, 14)
+                            if row.id != GenerationCondition.all.last?.id { Divider().padding(.horizontal, 15) }
+                        }
+                    }
+                    .frame(minWidth: columns.map(\.1).reduce(0, +) + 72, alignment: .leading)
+                    .background(Palette.surface, in: RoundedRectangle(cornerRadius: 15))
+                    .overlay(RoundedRectangle(cornerRadius: 15).stroke(Palette.line, lineWidth: 1))
+                }
+                .scrollIndicators(.visible)
+
+                Text("Compression is summary words divided by source words. Generation time is per output on a shared Colab Tesla T4 and is descriptive, not a model-quality score.")
+                    .font(.system(size: 12))
+                    .foregroundStyle(Palette.muted)
+                    .lineSpacing(4)
+
+                VStack(alignment: .leading, spacing: 13) {
+                    Text("Mechanical quality audit").font(.system(size: 17, weight: .semibold))
+                    HStack(spacing: 12) {
+                        MetricCard(value: "0", title: "Token-cap hits", detail: "All outputs ended below the retry cap")
+                        MetricCard(value: "0", title: "Empty outputs", detail: "Every generation contains text")
+                        MetricCard(value: "0", title: "Truncated sources", detail: "All selected inputs fit the source budget")
+                        MetricCard(value: "2", title: "No final punctuation", detail: "Check these for completeness")
+                    }
+                }
+                NoticeCard(
+                    title: "The audit does not verify factuality",
+                    message: "The corpus has no gold summaries, so ROUGE is not applicable. Human factuality review was skipped. The AI-assisted labels remain unvalidated screening results.",
+                    tone: .amber
+                )
+            }
+            .padding(30)
+            .frame(maxWidth: 1080, alignment: .leading)
         }
     }
 }

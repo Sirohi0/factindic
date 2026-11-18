@@ -39,7 +39,7 @@ verify_setup.py
 /results/prompt_pilot_review_candidate_2026-11-09/*
 !/results/prompt_pilot_review_candidate_2026-11-09/assistant_only_review_status_2026-11-13.md
 
-# Only the current teacher deck and supervisor brief are intended for the public repo
+# Teacher-facing decks and the supervisor brief intended for the public repo
 *.pptx
 !FactIndic_Progress_Checkpoint_2026-11-13_NLI_rescored.pptx
 !FactIndic_Scope_Correction_2026-11-13.pptx
@@ -48,3 +48,9 @@ verify_setup.py
 !FactIndic_Scope_Correction_2026-11-13.pdf
 
 !FactIndic_Progress_Checkpoint_2026-11-17_AI_screening.pptx
+
+# Public aggregate and final teacher-facing artifacts (no row-level source data)
+!/results/final_hinglish_generation_metrics_2026-11-18.csv
+!/results/final_hinglish_generation_metrics_2026-11-18.md
+!docs/final_submission/FactIndic_Final_Presentation_Final_2026-11-18.pptx
+!docs/final_submission/FactIndic_Research_Paper_Final_2026-11-18.pdf

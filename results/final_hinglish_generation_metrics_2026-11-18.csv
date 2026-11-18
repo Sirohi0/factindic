@@ -1,0 +1,5 @@
+model_key,prompt_arm,n_outputs,mean_summary_words,median_summary_words,mean_source_words,mean_per_document_compression_ratio,corpus_compression_ratio,mean_generation_seconds,median_generation_seconds,source_truncated_n,mean_generated_tokens
+qwen3_1_7b,standard,30,53.77,54.5,69.87,0.7702,0.7696,4.54,3.297,0,85.43
+qwen3_1_7b,factuality_aware,30,46.7,44.5,69.87,0.6752,0.6684,3.032,2.848,0,67.53
+qwen3_4b,standard,30,54.1,54.0,69.87,0.7829,0.7743,4.75,4.493,0,78.83
+qwen3_4b,factuality_aware,30,49.3,51.0,69.87,0.7101,0.7056,4.126,4.109,0,70.53

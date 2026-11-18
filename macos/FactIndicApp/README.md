@@ -1,8 +1,9 @@
 # FactIndic for macOS
 
 A native SwiftUI viewer for the project results. It shows the paired Hindi
-baseline comparison, the four Roman-script Hinglish model/prompt groups, and
-project methods without running inference or requiring internet access.
+baseline comparison, the four Roman-script Hinglish model/prompt groups, final
+per-condition generation metrics, and project methods without running inference
+or requiring internet access.
 Factuality labels are AI-screened; human verification was skipped for this
 version.
 

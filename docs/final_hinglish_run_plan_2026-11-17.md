@@ -20,14 +20,13 @@ The dataset contains English news article text paired with Romanized Hinglish ve
 - The final Colab run completed on a Tesla T4: 30 sources and 120 outputs across two Qwen3 sizes and two prompt styles.
 - The quality gate passed: 0 cap hits, empty outputs, replacement-character rows, or truncated sources; 2 outputs lacked terminal punctuation.
 - A source-grounded AI screening pass produced 19 supported, 27 minor-error, and 74 major-error labels. These are AI assessments, not human factuality labels.
-- The Colab aggregate ZIP initially called the review human-annotated. A corrected archive, `results/factindic_final_hinglish_AI_assessed_aggregate_results.zip`, now names the AI review explicitly; do not use the original archive as human results.
-- No row-level source, summary, or review data is committed to GitHub.
+- The user-provided Section 7 ZIP contains the final per-condition generation metrics. The aggregate report and CSV are in `results/final_hinglish_generation_metrics_2026-11-18.md` and `.csv`.
+- The aggregate metrics show mean summaries from 46.70 to 54.10 words and mean generation time from 3.032 to 4.750 seconds per output across conditions. These are descriptive values from a Colab Tesla T4 run.
+- No row-level source, summary, blinded key, or review data is committed to GitHub.
 
-## Remaining steps
+## Project status
 
-1. Treat the AI counts and paired intervals as exploratory screening only; the confidence intervals do not establish a prompt winner.
-2. If a human factuality claim is required, a person must verify labels against each source; the AI sheet cannot satisfy this requirement.
-3. The report and frontend now show the corrected dataset, AI-only screening results, and limitations. Update the teacher slides with these results before presenting them.
+The current exploratory version is complete: the final generation run, mechanical audit, per-condition metrics export, AI-assisted source screen, research paper, presentation, and native results viewer are aligned. Human factuality validation was explicitly skipped. A later human review would be needed only for claims about human-verified factuality; it is not a required step for presenting this version.
 
 ## Limits to report
 

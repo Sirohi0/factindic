@@ -9,7 +9,7 @@ Status updated 18 November 2026.
 
 [![Open final pilot in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Sirohi0/factindic/blob/main/factindic_final_open_hinglish_colab.ipynb)
 
-**Final Roman-script Hinglish pilot (17 November):** the public `News_Hinglish_English` dataset was used after the teacher approved any dataset. The GPU run completed on 30 sources and produced 120 summaries across Qwen3-1.7B/Qwen3-4B and standard/factuality-aware prompts. The dataset's Hinglish side is machine-generated and curated, and it has no gold summaries, so ROUGE is not reported. A separate AI-assisted source comparison flagged 74 major errors, 27 minor errors, and 19 supported summaries; these are provisional AI judgments, not human factuality labels. The run is exploratory and establishes no prompt winner. Human validation is intentionally skipped for this version. The revised Colab notebook exports per-condition length, compression, and inference-time metrics from saved generations; rerun that lightweight export to refresh the aggregate. See the [AI-screening report](docs/final_hinglish_ai_screening_report_2026-11-17.md), [run checkpoint](docs/final_hinglish_run_plan_2026-11-17.md), and [Colab notebook](factindic_final_open_hinglish_colab.ipynb).
+**Final Roman-script Hinglish pilot (17 November):** the public `News_Hinglish_English` dataset was used after the teacher approved any dataset. The GPU run completed on 30 sources and produced 120 summaries across Qwen3-1.7B/Qwen3-4B and standard/factuality-aware prompts. The dataset's Hinglish side is machine-generated and curated, and it has no gold summaries, so ROUGE is not reported. A separate AI-assisted source comparison flagged 74 major errors, 27 minor errors, and 19 supported summaries; these are provisional AI judgments, not human factuality labels. The run is exploratory and establishes no prompt winner. Human validation is intentionally skipped for this version. The final run also exports per-condition summary length, compression, and generation-time metrics. Aggregate results are recorded in [`results/final_hinglish_generation_metrics_2026-11-18.md`](results/final_hinglish_generation_metrics_2026-11-18.md) and the companion CSV; no row-level source or summary text is published. See the [AI-screening report](docs/final_hinglish_ai_screening_report_2026-11-17.md), [run checkpoint](docs/final_hinglish_run_plan_2026-11-17.md), and [Colab notebook](factindic_final_open_hinglish_colab.ipynb).
 
 **Dataset-scope correction:** the intended code-mixed target is Roman-script
 Hinglish (Hindi transliterated into Latin letters, mixed with English). An audit
@@ -23,7 +23,7 @@ The 500-example Hindi mT5 baseline and a paired synthetic p100 code-mix baseline
 
 The earlier controlled standard-vs-factuality-aware pilot has a 152-summary quality-filtered candidate, assistant-only source checks, and a clean-source NLI re-score. It does not match the intended Roman-script Hinglish style: all 76 unique sources are Devanagari-based. Keep these results exploratory and do not annotate the old review sheet as the target Hinglish evaluation. Neither assistant screening nor NLI scores are human factuality labels. See `docs/dataset_scope_correction_2026-11-13.md` before using prior code-mix results.
 
-The teacher-facing research paper and nine-slide presentation are in [`docs/final_submission/`](docs/final_submission/). They report the AI-screened findings and their limits. The 17 November checkpoint and 13 November scope-correction deck/PDF remain historical context.
+The final teacher-facing deliverables are the [research paper PDF](docs/final_submission/FactIndic_Research_Paper_Final_2026-11-18.pdf), [editable paper DOCX](docs/final_submission/FactIndic_Research_Paper_Final_2026-11-18.docx), and [nine-slide presentation](docs/final_submission/FactIndic_Final_Presentation_Final_2026-11-18.pptx). They include the final generation metrics and distinguish AI screening from human validation. The 17 November checkpoint and 13 November scope-correction deck/PDF remain historical context.
 
 A gated GupShup alternative remains in `factindic_romanized_hinglish_colab.ipynb`. The current final path is `factindic_final_open_hinglish_colab.ipynb`, which pins the public Romanized Hinglish news corpus, runs a paired two-size/two-prompt comparison, and exports a private blinded factuality worksheet. Since the corpus has no gold summaries, the notebook intentionally omits ROUGE. AI-assisted labels are exported with explicit AI metadata and remain separate from human evaluation.
 
@@ -33,8 +33,9 @@ A gated GupShup alternative remains in `factindic_romanized_hinglish_colab.ipynb
 - Earlier code-mix data exploration: MUTANT (Gupta, Srivastava, and Singh, Findings of EACL 2023, DOI 10.18653/v1/2023.findings-eacl.56). Its sampled items in this project are Devanagari-based, so they do not satisfy the corrected Roman-script Hinglish target. Of 50 PM-speech and Mankibaat candidates, 47 map uniquely by exact text match to an upstream file and 3 match two files; within the 30-example prompt pilot, 28 map uniquely and 2 are ambiguous. See `scripts/map_mutant_provenance.py` and `results/mutant_source_provenance_audit_2026-11-13.md`.
 - GupShup h2e remains a better fit if access is granted because it includes reference summaries; its access request is pending and no data is present locally.
 - Current final data path: `suyash2739/News_Hinglish_English`, a public English/Romanized-Hinglish news parallel corpus, pinned in the final Colab notebook. The Hinglish side is machine-generated and curated, and the dataset contains translations rather than summary references. The final generation run is complete; human factuality review has not been completed.
-- Factuality methodology (later phase): inspired by factCC (Salesforce).
-  I am adapting the idea, not using their trained English model.
+- Factuality approach: a source-grounded AI-assisted screen informed by factCC.
+  It is an exploratory, unvalidated signal; this project does not use the trained
+  FactCC English model or claim human-verified factuality.
 
 ## My contribution (in progress)
 Baseline evaluation, error analysis, a Hindi/code-mixed factuality
@@ -56,7 +57,7 @@ the same command and finished documents are skipped.
 ## Native macOS frontend
 
 The local SwiftUI app is in `macos/FactIndicApp/`. It presents the Hindi paired
-baseline, the pilot summary, model/prompt comparisons, methods, and limitations. It is a results
+baseline, AI-screened pilot comparisons, per-condition generation metrics, methods, and limitations. It is a results
 viewer only: it does not run models, training, or factuality verification on the
 Mac. The displayed labels are AI-assisted screening, not human-verified results.
 
@@ -92,8 +93,8 @@ open macos/FactIndicApp/FactIndic.app
 | `results/factindic_interim_project_report_2026-11-13.md` | Current integrated project checkpoint and remaining work |
 | `FactIndic_Scope_Correction_2026-11-13.pptx` / `.pdf` | Teacher-facing explanation of the script mismatch and corrected experiment plan |
 | `results/factindic_checkpoint_for_maam_2026-11-13.pdf` | Two-page supervisor brief with workflow, results, model rationale, and limits |
-| `docs/final_submission/FactIndic_Research_Paper.docx` / `.pdf` | IEEE-style student paper with the completed results and limits |
-| `docs/final_submission/FactIndic_Final_Presentation.pptx` | Teacher-facing presentation with the project architecture and paired results |
+| `docs/final_submission/FactIndic_Research_Paper_Final_2026-11-18.docx` / `.pdf` | Final student paper with completed metrics and limitations |
+| `docs/final_submission/FactIndic_Final_Presentation_Final_2026-11-18.pptx` | Final teacher-facing presentation with project architecture and results |
 
 ## Prompt-pilot NLI screening
 

@@ -35,16 +35,17 @@ The 120 blinded source-summary pairs were compared by one AI reviewer against th
 
 Paired bootstrap error-rate differences (AI labels; factuality-aware minus standard) were −6.7 percentage points for Qwen3-1.7B (95% interval −20.0 to +6.7) and −3.3 points for Qwen3-4B (−13.3 to +6.7). Both intervals include zero. These screening results do not establish a prompt winner. The AI review also found frequent number, date, entity, relation, and attribution errors; the detailed AI-labeled sheet is private and is not included in this repository.
 
+## Final generation metrics
+
+The completed Section 7 export reports 30 outputs per condition. Mean summary length ranged from 46.70 to 54.10 words, mean per-document compression from 0.6752 to 0.7829, and mean generation time from 3.032 to 4.750 seconds on the Colab Tesla T4. No source was truncated. The complete aggregate table is in `results/final_hinglish_generation_metrics_2026-11-18.md`.
+
 ## Current conclusion
 
 The corrected Roman-script pilot is now executed, and the generated sample is suitable for exploratory review. The AI pass flags substantial factual drift across both models and prompt styles, but the judgments are not independently validated. There is no human factuality result, no claim of a factuality winner, and no generalization beyond this small news-domain sample.
 
-## Remaining work
+## Project status
 
-1. If the project requires factuality results, have a human annotator verify the 120 labels against the exact source text; preserve the current AI sheet as a separate screen.
-2. Recompute and publish the final aggregate only from human labels if a human review is completed.
-3. The teacher-facing checkpoint deck and frontend now show these results with the AI/human distinction.
-4. If presenting a factuality outcome, complete human verification and publish a revised analysis; otherwise present this strictly as an AI-screened exploratory pilot.
+The exploratory project version is complete and reports the final generation audit, metrics, and AI-assisted source screen. Human factuality review remains intentionally skipped. The AI judgments are not human-verified results, and no prompt winner is established.
 
 ## Reproducibility and privacy
 
