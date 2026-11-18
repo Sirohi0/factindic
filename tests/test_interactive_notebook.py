@@ -119,3 +119,16 @@ def test_claim_checker_cannot_assert_numbers_absent_from_summary():
     assert [claim["claim_numbers_not_in_summary"] for claim in claims] == [["2"], ["1", "1923", "31"]]
     assert "unreliable" in namespace["factuality_summary"](claims)
     assert all(not claim["source_evidence"] for claim in claims)
+
+
+def test_summary_is_labeled_unverified_when_evidence_is_unclear_or_unavailable():
+    helpers = next(source for source in _python_cells() if "def summary_requires_review(" in source)
+    tree = ast.parse(helpers)
+    function = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == "summary_requires_review")
+    namespace = {}
+    exec(compile(ast.Module(body=[function], type_ignores=[]), "<review-label>", "exec"), namespace)
+    needs_review = namespace["summary_requires_review"]
+    assert needs_review([{"assessment": "checker_mismatch", "quote_found_in_model_input": False}])
+    assert needs_review([{"assessment": "supported", "quote_found_in_model_input": True}], date_correction={"source_date": "23 August 2023"})
+    assert needs_review([], claim_check_error="bad JSON")
+    assert not needs_review([{"assessment": "supported", "quote_found_in_model_input": True}])
