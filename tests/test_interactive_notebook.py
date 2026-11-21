@@ -220,3 +220,33 @@ def test_summary_requires_review_when_nli_flags_contradiction():
         "quote_found_in_model_input": True,
         "independent_nli_label": "contradiction",
     }])
+
+
+def test_fact_anchors_and_hinglish_nli_normalization():
+    helpers = next(source for source in _python_cells() if "def extract_fact_anchors(" in source)
+    tree = ast.parse(helpers)
+    needed = {
+        "_MONTH_ALIASES", "_DATE_PATTERN", "_HINGLISH_NLI_GLOSSES",
+        "numeric_tokens", "extract_fact_anchors", "normalize_hinglish_for_nli",
+    }
+    selected = [
+        node for node in tree.body
+        if (isinstance(node, ast.FunctionDef) and node.name in needed)
+        or (isinstance(node, ast.Assign) and any(
+            isinstance(t, ast.Name) and t.id in needed for t in node.targets
+        ))
+    ]
+    namespace = {"re": __import__("re"), "unicodedata": __import__("unicodedata")}
+    exec(compile(ast.Module(body=selected, type_ignores=[]), "<anchors-nli>", "exec"), namespace)
+
+    warning_src = (
+        "Heavy rain ke baad administration ne alert jaari kiya hai ki log Yamuna nadi ke kinare "
+        "bilkul na jaayein aur bridge par traffic band hai."
+    )
+    anchors = namespace["extract_fact_anchors"](warning_src)
+    assert "bilkul na" in anchors["cues"]
+    assert "band hai" in anchors["cues"]
+
+    norm = namespace["normalize_hinglish_for_nli"](warning_src)
+    assert "do not go" in norm.lower()
+    assert "is closed" in norm.lower()
