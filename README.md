@@ -76,35 +76,22 @@ Build and launch the Mac app from the repository root:
 open macos/FactIndicApp/FactIndic.app
 ```
 
-## Layout
+## Where to Find What (Repository Map)
+
 | Path | Purpose |
 | --- | --- |
-| `src/factindic/config.py` | Pinned model and dataset revisions, generation settings |
-| `src/factindic/data.py` | Loads the XL-Sum split from the pinned parquet revision |
-| `src/factindic/baseline.py` | Inference-only baseline runner (resumable, per-document timing) |
-| `src/factindic/metrics.py` | ROUGE precision/recall/F1, lengths, compression ratio, time |
-| `src/factindic/text_utils.py` | Hindi-safe tokenizer, whitespace and digit helpers |
-| `src/factindic/repro.py` | Records versions, device, git commit and sample ids per run |
-| `scripts/` | `run_baseline.py`, `evaluate.py` |
-| `scripts/summarize_assistant_prompt_review.py` | Rebuilds the descriptive assistant-only comparison from the review CSV; does not produce factuality gold labels |
-| `scripts/analyze_nli_prompt_screening.py` | Verifies a Colab NLI ZIP against its input candidate and rebuilds matched prompt-arm score comparisons |
-| `scripts/audit_romanized_parallel.py` | Checks paired source/reference alignment and Roman/Devanagari script counts for private GupShup h2e files; it does not replace manual Hinglish review |
-| `results/<run>/` | Run metadata, metrics, predictions, and analysis artifacts |
-| `factindic_prompt_comparison_colab_revamped.ipynb` | Refreshed Colab prompt pilot with input checks, progress checkpoints, and diagnostic-vs-annotation export gating |
-| `factindic_romanized_hinglish_colab.ipynb` | Corrected GupShup h2e Roman-script pilot: 30 paired test sources, two multilingual 4B models, two prompts, blind human factuality review, paired ROUGE bootstrap |
-| `factindic_final_open_hinglish_colab.ipynb` | Final-run Colab: 30 Roman-script Hinglish news inputs × two Qwen3 sizes × two prompts, private review workflow, per-condition generation metrics, no ROUGE because no gold summaries |
-| `factindic_interactive_evaluation_colab.ipynb` | Live Colab demonstration: paste one Roman-script Hinglish source, generate an English summary, and inspect claim-level source evidence |
-| `docs/factuality_annotation_protocol.md` | Human factuality labels and adjudication guidance |
-| `docs/project_checkpoint_2026-11-13.md` | Current progress ladder, limitations, and next steps |
-| `docs/dataset_scope_correction_2026-11-13.md` | Corrected Roman-script Hinglish target, existing-data audit, and replacement plan |
-| `results/paired_baseline_comparison.md` | Paired ROUGE comparison with bootstrap intervals |
-| `results/prompt_pilot_nli_rescore_2026-11-13/` | Clean-source Colab re-score, archive, row-level audit, and comparison with the original run |
-| `results/factindic_interim_project_report_2026-11-13.md` | Current integrated project checkpoint and remaining work |
-| `FactIndic_Scope_Correction_2026-11-13.pptx` / `.pdf` | Teacher-facing explanation of the script mismatch and corrected experiment plan |
-| `results/factindic_checkpoint_for_maam_2026-11-13.pdf` | Two-page supervisor brief with workflow, results, model rationale, and limits |
-| `docs/final_submission/FactIndic_Research_Paper_Final_2026-11-18.docx` / `.pdf` | Final IEEE R&D paper with architecture, metrics, and limitations |
-| `docs/final_submission/FactIndic_Project_Report_Final_2026-11-18.md` / `.docx` / `.pdf` | Final comprehensive project report aligned with CSET 346 |
-| `docs/final_submission/FactIndic_Final_Presentation_Final_2026-11-18.pptx` | Final teacher-facing presentation with project architecture and results |
+| `docs/final_submission/` | **Teacher-facing deliverables:** IEEE paper (`.docx`/`.pdf`), project report (`.md`/`.docx`/`.pdf`), 9-slide presentation (`.pptx`). |
+| `factindic_interactive_evaluation_colab.ipynb` | **Live Colab T4 demo:** Dual-archetype (`Auto-detect`, Roman Hinglish, Devanagari/Code-Mixed) summary + claim-level evidence + `mDeBERTa` NLI. |
+| `factindic_dual_archetype_reeval_colab.ipynb` | **Dual-archetype guarded re-eval:** 240-output benchmark across Roman Hinglish (`News_Hinglish_English`) and Devanagari (`XL-Sum p=1.0`). |
+| `factindic_final_open_hinglish_colab.ipynb` | **Original Roman Hinglish pilot:** 120-summary paired comparison (`Qwen3 1.7B/4B` × `Standard/Factuality-aware`). |
+| `macos/FactIndicApp/` | **Native macOS SwiftUI viewer:** Browse baselines, dual-archetype guarded results, generation metrics, and run `51` unit tests. |
+| `src/factindic/` | Core Python package (`config`, `data`, `baseline`, `checks`, `codemix`, `metrics`, `analysis`, `text_utils`, `repro`). |
+| `scripts/` | CLI runners & audits (`run_baseline.py`, `evaluate.py`, `make_codemixed.py`, `analyze.py`, `map_mutant_provenance.py`). |
+| `tests/` | `51` fast local unit & notebook-contract tests (`pytest`, runs in `~0.5s` with no GPU). |
+| `results/` | Saved aggregate metrics (`dual_archetype_reeval_summary.json`, `paired_baseline_comparison.md`, `final_hinglish_generation_metrics_2026-11-18.md`). |
+| `docs/checkpoints/` | Dated engineering checkpoints, scope-correction audit, and AI-screening notes. |
+| `docs/archive/presentations/` | Historical milestone & scope-correction slide decks (`FactIndic_Scope_Correction_2026-11-13.pptx`, etc.). |
+| `notebooks/archive/` | Earlier Devanagari prompt-comparison, NLI screening, and gated GupShup `h2e` notebooks. |
 
 ## Prompt-pilot NLI screening
 

@@ -41,16 +41,17 @@ verify_setup.py
 
 # Teacher-facing decks and the supervisor brief intended for the public repo
 *.pptx
-!FactIndic_Progress_Checkpoint_2026-11-13_NLI_rescored.pptx
-!FactIndic_Scope_Correction_2026-11-13.pptx
+!docs/archive/presentations/FactIndic_Progress_Checkpoint_2026-11-13_NLI_rescored.pptx
+!docs/archive/presentations/FactIndic_Scope_Correction_2026-11-13.pptx
+!docs/archive/presentations/FactIndic_Progress_Checkpoint_2026-11-17_AI_screening.pptx
+!docs/final_submission/FactIndic_Final_Presentation_Final_2026-11-18.pptx
 *.pdf
 !results/factindic_checkpoint_for_maam_2026-11-13.pdf
-!FactIndic_Scope_Correction_2026-11-13.pdf
-
-!FactIndic_Progress_Checkpoint_2026-11-17_AI_screening.pptx
+!docs/archive/presentations/FactIndic_Scope_Correction_2026-11-13.pdf
+!docs/final_submission/FactIndic_Research_Paper_Final_2026-11-18.pdf
+!docs/final_submission/FactIndic_Project_Report_Final_2026-11-18.pdf
 
 # Public aggregate and final teacher-facing artifacts (no row-level source data)
+!/results/dual_archetype_reeval_summary.json
 !/results/final_hinglish_generation_metrics_2026-11-18.csv
 !/results/final_hinglish_generation_metrics_2026-11-18.md
-!docs/final_submission/FactIndic_Final_Presentation_Final_2026-11-18.pptx
-!docs/final_submission/FactIndic_Research_Paper_Final_2026-11-18.pdf

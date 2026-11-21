@@ -1,0 +1,146 @@
+{
+  "summary_table": [
+    {
+      "archetype": "roman_hinglish",
+      "model": "Qwen3 1.7B",
+      "prompt": "Standard",
+      "n": 30,
+      "supported": 13,
+      "minor": 0,
+      "major": 17,
+      "error_rate_pct": 56.7,
+      "pass_rate_pct": 43.3,
+      "mean_words": 44.73,
+      "mean_compression": 0.6274,
+      "mean_gen_sec": 2.975
+    },
+    {
+      "archetype": "roman_hinglish",
+      "model": "Qwen3 1.7B",
+      "prompt": "Factuality-aware",
+      "n": 30,
+      "supported": 11,
+      "minor": 0,
+      "major": 19,
+      "error_rate_pct": 63.3,
+      "pass_rate_pct": 36.7,
+      "mean_words": 45.07,
+      "mean_compression": 0.6325,
+      "mean_gen_sec": 2.994
+    },
+    {
+      "archetype": "roman_hinglish",
+      "model": "Qwen3 4B",
+      "prompt": "Standard",
+      "n": 30,
+      "supported": 16,
+      "minor": 2,
+      "major": 12,
+      "error_rate_pct": 46.7,
+      "pass_rate_pct": 53.3,
+      "mean_words": 48.1,
+      "mean_compression": 0.6764,
+      "mean_gen_sec": 3.928
+    },
+    {
+      "archetype": "roman_hinglish",
+      "model": "Qwen3 4B",
+      "prompt": "Factuality-aware",
+      "n": 30,
+      "supported": 15,
+      "minor": 2,
+      "major": 13,
+      "error_rate_pct": 50.0,
+      "pass_rate_pct": 50.0,
+      "mean_words": 49.2,
+      "mean_compression": 0.6911,
+      "mean_gen_sec": 4.131
+    },
+    {
+      "archetype": "devanagari_codemixed",
+      "model": "Qwen3 1.7B",
+      "prompt": "Standard",
+      "n": 30,
+      "supported": 0,
+      "minor": 0,
+      "major": 30,
+      "error_rate_pct": 100.0,
+      "pass_rate_pct": 0.0,
+      "mean_words": 77.8,
+      "mean_compression": 0.2315,
+      "mean_gen_sec": 5.198
+    },
+    {
+      "archetype": "devanagari_codemixed",
+      "model": "Qwen3 1.7B",
+      "prompt": "Factuality-aware",
+      "n": 30,
+      "supported": 0,
+      "minor": 0,
+      "major": 30,
+      "error_rate_pct": 100.0,
+      "pass_rate_pct": 0.0,
+      "mean_words": 81.43,
+      "mean_compression": 0.2443,
+      "mean_gen_sec": 5.62
+    },
+    {
+      "archetype": "devanagari_codemixed",
+      "model": "Qwen3 4B",
+      "prompt": "Standard",
+      "n": 30,
+      "supported": 1,
+      "minor": 0,
+      "major": 29,
+      "error_rate_pct": 96.7,
+      "pass_rate_pct": 3.3,
+      "mean_words": 76.5,
+      "mean_compression": 0.2245,
+      "mean_gen_sec": 7.541
+    },
+    {
+      "archetype": "devanagari_codemixed",
+      "model": "Qwen3 4B",
+      "prompt": "Factuality-aware",
+      "n": 30,
+      "supported": 2,
+      "minor": 3,
+      "major": 25,
+      "error_rate_pct": 93.3,
+      "pass_rate_pct": 6.7,
+      "mean_words": 79.23,
+      "mean_compression": 0.2314,
+      "mean_gen_sec": 8.608
+    }
+  ],
+  "paired_prompt_diffs": [
+    {
+      "archetype": "roman_hinglish",
+      "model": "Qwen3 1.7B",
+      "diff_pp": 6.67,
+      "ci_low": 0.0,
+      "ci_high": 16.67
+    },
+    {
+      "archetype": "roman_hinglish",
+      "model": "Qwen3 4B",
+      "diff_pp": 3.33,
+      "ci_low": 0.0,
+      "ci_high": 10.0
+    },
+    {
+      "archetype": "devanagari_codemixed",
+      "model": "Qwen3 1.7B",
+      "diff_pp": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0
+    },
+    {
+      "archetype": "devanagari_codemixed",
+      "model": "Qwen3 4B",
+      "diff_pp": -3.33,
+      "ci_low": -16.67,
+      "ci_high": 6.67
+    }
+  ]
+}
