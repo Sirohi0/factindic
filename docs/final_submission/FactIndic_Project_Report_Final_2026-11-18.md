@@ -15,9 +15,9 @@ FactIndic investigates **factuality-aware abstractive summarization for Hindi an
 The completed project delivers:
 1. **Paired Hindi vs. Synthetic Code-Mixed Baseline (500 articles):** `csebuetnlp/mT5_multilingual_XLSum` evaluated on 500 XL-Sum Hindi test articles (seed 42) and a synthetic `p100` code-mixed perturbation against the same Hindi references.
 2. **Corrected Roman-Script Hinglish Pilot (30 sources × 4 conditions = 120 summaries):** Qwen3 1.7B and Qwen3 4B with standard vs. factuality-aware prompts on `suyash2739/News_Hinglish_English` (pinned revision `22a19b81fd8cc151a9d011cfdd7e6dd4e9f2b359`), audited for generation quality, length/compression, latency, and AI-assisted source comparison.
-3. **Live Interactive Colab Evaluation Demo:** Single-input Roman-script Hinglish summarization and claim-evidence verification on a Colab T4 GPU (`factindic_interactive_evaluation_colab.ipynb`), using pure greedy decoding, numeric/date/name consistency guards, verbatim source-quote checking, and a secondary cross-lingual NLI signal (`MoritzLaurer/mDeBERTa-v3-base-mnli-xnli`).
-4. **Native macOS Results Viewer:** A SwiftUI viewer (`macos/FactIndicApp/`) presenting baseline and pilot results without running local model inference.
-5. **Engineering Verification:** **49 local unit tests passing** (`pytest`), cleanly compiled macOS viewer, and reproducible metadata tracking.
+3. **Dual-Archetype Guarded Re-Evaluation (30 Roman + 30 Devanagari/Code-Mixed × 4 conditions = 240 outputs):** Re-evaluated the guarded pipeline (pure greedy decoding, deterministic `extract_fact_anchors`, verbatim quote verification, Hinglish NLI gloss normalization, and `NLI_CONTRADICTION_THRESHOLD = 0.85`) in `factindic_dual_archetype_reeval_colab.ipynb`, cutting Roman-script Hinglish AI-screened error rates by **23.4–36.6 pp** (down to **46.7%** on Qwen3 4B Standard).
+4. **Live Interactive Colab Evaluation Demo:** Single-input dual-archetype summarization (`Auto-detect`, `Devanagari / Code-Mixed`, `Roman-script Hinglish`) and claim-evidence verification on a Colab T4 GPU (`factindic_interactive_evaluation_colab.ipynb`).
+5. **Native macOS Results Viewer & Verification:** A SwiftUI viewer (`macos/FactIndicApp/`) displaying baselines, original pilot, and dual-archetype guarded results alongside **51 passing local unit tests** (`pytest`).
 
 **Core Limitation:** Human factuality annotation was intentionally skipped for this version. All 120-summary screening labels and live interactive claim checks are **AI-assisted signals**, not human-verified factuality gold labels, and no prompt or model is claimed as a factuality winner.
 
@@ -74,11 +74,30 @@ After removing `repetition_penalty=1.03` and `no_repeat_ngram_size=3`, live T4 t
 
 ---
 
+### 4.4 Dual-Archetype Guarded Re-Evaluation (`N = 30` per Archetype × 4 Conditions = 240 Outputs)
+
+To measure the impact of pure greedy decoding, deterministic `extract_fact_anchors`, verbatim quote checking, Hinglish NLI gloss normalization, and `NLI_CONTRADICTION_THRESHOLD = 0.85` across both course-rubric archetypes (`results/dual_archetype_reeval_summary.json`):
+
+| Archetype | Model & Prompt | Supported | Minor | Major | Error Rate | Delta vs. Pilot | Mean Words | Mean Comp. | Mean Sec. |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Roman Hinglish | Qwen3 1.7B · Standard | 13 | 0 | 17 | 56.7% | −36.6 pp | 44.73 | 0.6274 | 2.975 |
+| Roman Hinglish | Qwen3 1.7B · Factuality-aware | 11 | 0 | 19 | 63.3% | −23.4 pp | 45.07 | 0.6325 | 2.994 |
+| Roman Hinglish | Qwen3 4B · Standard | 16 | 2 | 12 | 46.7% | −33.3 pp | 48.10 | 0.6764 | 3.928 |
+| Roman Hinglish | Qwen3 4B · Factuality-aware | 15 | 2 | 13 | 50.0% | −26.7 pp | 49.20 | 0.6911 | 4.131 |
+| Devanagari / Code-Mixed | Qwen3 1.7B · Standard | 0 | 0 | 30 | 100.0% | — | 77.80 | 0.2315 | 5.198 |
+| Devanagari / Code-Mixed | Qwen3 1.7B · Factuality-aware | 0 | 0 | 30 | 100.0% | — | 81.43 | 0.2443 | 5.620 |
+| Devanagari / Code-Mixed | Qwen3 4B · Standard | 1 | 0 | 29 | 96.7% | — | 76.50 | 0.2245 | 7.541 |
+| Devanagari / Code-Mixed | Qwen3 4B · Factuality-aware | 2 | 3 | 25 | 93.3% | — | 79.23 | 0.2314 | 8.608 |
+
+Paired prompt diffs (Factuality-aware minus Standard): Roman Hinglish `+6.67 pp` (`[0.0, 16.67]`) for 1.7B and `+3.33 pp` (`[0.0, 10.0]`) for 4B; Devanagari/Code-Mixed `0.0 pp` (`[0.0, 0.0]`) for 1.7B and `−3.33 pp` (`[−16.67, 6.67]`) for 4B.
+
+---
+
 ## 5. Limitations & Conclusion
 
-- **Sample & Domain:** 30 machine-curated news translations do not represent informal, naturally authored Hinglish across social or conversational domains.
-- **Unvalidated Signals:** Neither the 120-summary AI screen nor the secondary `mDeBERTa` NLI check substitutes for human source-grounded annotation.
-- **Engineering Readiness:** All **49 local unit tests** pass, the macOS SwiftUI viewer builds, and the live Colab demo reliably surfaces uncertainty rather than masking model errors.
+- **Sample & Domain:** 30 machine-curated news translations do not represent informal, naturally authored Hinglish across social or conversational domains, and long multi-paragraph XL-Sum `p=1.0` articles (`0.22–0.24` compression) remain challenging under strict verbatim-quote checks.
+- **Unvalidated Signals:** Neither the 120-summary AI screen, the 240-output guarded re-evaluation, nor the secondary `mDeBERTa` NLI check substitutes for human source-grounded annotation.
+- **Engineering Readiness:** All **51 local unit tests** pass, the macOS SwiftUI viewer builds with dual-archetype results, and the live Colab demo reliably surfaces uncertainty rather than masking model errors.
 
 ---
 

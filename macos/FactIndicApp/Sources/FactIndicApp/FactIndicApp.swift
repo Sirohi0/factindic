@@ -62,7 +62,16 @@ private enum AppPage: String, CaseIterable, Identifiable {
     }
 }
 
+private enum ResultRunKind: String, CaseIterable, Identifiable {
+    case guardedRoman = "Guarded · Roman Hinglish (New)"
+    case guardedDevanagari = "Guarded · Devanagari Code-Mixed (New)"
+    case originalRoman = "Original Pilot · Roman Hinglish"
+
+    var id: String { rawValue }
+}
+
 private struct PilotResult: Identifiable {
+    let run: ResultRunKind
     let model: String
     let prompt: String
     let supported: Int
@@ -70,23 +79,45 @@ private struct PilotResult: Identifiable {
     let major: Int
     let notes: String
 
-    var id: String { "\(model)-\(prompt)" }
+    var id: String { "\(run.rawValue)-\(model)-\(prompt)" }
     var errors: Int { minor + major }
     var rate: Double { Double(errors) / 30.0 }
 
     static let all: [PilotResult] = [
-        .init(model: "Qwen3 · 1.7B", prompt: "Standard", supported: 2, minor: 4, major: 24,
-              notes: "Baseline standard prompt on 30 Roman-script Hinglish news articles. High rate of unsupported additions and entity/number drift."),
-        .init(model: "Qwen3 · 1.7B", prompt: "Factuality-aware", supported: 4, minor: 8, major: 18,
-              notes: "Paired difference vs. Standard: −6.7 pp (95% CI: −20.0 to +6.7 pp; includes zero). Shorter summaries (46.70 vs. 53.77 words)."),
-        .init(model: "Qwen3 · 4B", prompt: "Standard", supported: 6, minor: 9, major: 15,
-              notes: "Stronger baseline support than 1.7B, but 80.0% of outputs still received minor or major AI-screening error flags."),
-        .init(model: "Qwen3 · 4B", prompt: "Factuality-aware", supported: 7, minor: 6, major: 17,
-              notes: "Paired difference vs. Standard: −3.3 pp (95% CI: −13.3 to +6.7 pp; includes zero). Lowest overall error rate (76.7%) in the pilot.")
+        // Guarded Pipeline · Roman-Script Hinglish (N = 30)
+        .init(run: .guardedRoman, model: "Qwen3 · 1.7B", prompt: "Standard", supported: 13, minor: 0, major: 17,
+              notes: "Guarded greedy + fact anchors + NLI normalization. Error rate fell 36.6 pp vs. original pilot (93.3% → 56.7%; 43.3% pass rate)."),
+        .init(run: .guardedRoman, model: "Qwen3 · 1.7B", prompt: "Factuality-aware", supported: 11, minor: 0, major: 19,
+              notes: "Guarded pipeline. Error rate fell 23.4 pp vs. original pilot (86.7% → 63.3%). Paired diff vs. Standard: +6.67 pp (95% CI: 0.0 to +16.67)."),
+        .init(run: .guardedRoman, model: "Qwen3 · 4B", prompt: "Standard", supported: 16, minor: 2, major: 12,
+              notes: "Best overall guarded condition: 53.3% pass rate (error rate fell 33.3 pp vs. original 80.0% → 46.7%)."),
+        .init(run: .guardedRoman, model: "Qwen3 · 4B", prompt: "Factuality-aware", supported: 15, minor: 2, major: 13,
+              notes: "Guarded pipeline. Error rate fell 26.7 pp vs. original pilot (76.7% → 50.0%). Paired diff vs. Standard: +3.33 pp (95% CI: 0.0 to +10.0)."),
+
+        // Guarded Pipeline · Devanagari / Code-Mixed (XL-Sum p=1.0, N = 30)
+        .init(run: .guardedDevanagari, model: "Qwen3 · 1.7B", prompt: "Standard", supported: 0, minor: 0, major: 30,
+              notes: "Long multi-paragraph XL-Sum p100 articles (0.2315 compression). High abstractive compression triggered verbatim quote / NLI flags."),
+        .init(run: .guardedDevanagari, model: "Qwen3 · 1.7B", prompt: "Factuality-aware", supported: 0, minor: 0, major: 30,
+              notes: "Paired diff vs. Standard: 0.0 pp (95% CI: 0.0 to 0.0). 81.43 mean words, 0.2443 compression."),
+        .init(run: .guardedDevanagari, model: "Qwen3 · 4B", prompt: "Standard", supported: 1, minor: 0, major: 29,
+              notes: "1/30 passed all strict checks (96.7% flagged) on long Devanagari+English code-mixed XL-Sum news articles."),
+        .init(run: .guardedDevanagari, model: "Qwen3 · 4B", prompt: "Factuality-aware", supported: 2, minor: 3, major: 25,
+              notes: "2/30 supported, 3 minor, 25 major (93.3% flagged). Paired diff vs. Standard: −3.33 pp (95% CI: −16.67 to +6.67)."),
+
+        // Original Pilot · Roman-Script Hinglish (Baseline)
+        .init(run: .originalRoman, model: "Qwen3 · 1.7B", prompt: "Standard", supported: 2, minor: 4, major: 24,
+              notes: "Original pilot before decoding/anchor/NLI fixes. High rate of unsupported additions and entity/number drift."),
+        .init(run: .originalRoman, model: "Qwen3 · 1.7B", prompt: "Factuality-aware", supported: 4, minor: 8, major: 18,
+              notes: "Original pilot. Paired difference vs. Standard: −6.7 pp (95% CI: −20.0 to +6.7 pp; includes zero)."),
+        .init(run: .originalRoman, model: "Qwen3 · 4B", prompt: "Standard", supported: 6, minor: 9, major: 15,
+              notes: "Original pilot. Stronger baseline support than 1.7B, but 80.0% still received minor or major flags."),
+        .init(run: .originalRoman, model: "Qwen3 · 4B", prompt: "Factuality-aware", supported: 7, minor: 6, major: 17,
+              notes: "Original pilot. Paired difference vs. Standard: −3.3 pp (95% CI: −13.3 to +6.7 pp; includes zero).")
     ]
 }
 
 private struct GenerationCondition: Identifiable {
+    let run: ResultRunKind
     let model: String
     let prompt: String
     let meanWords: String
@@ -94,13 +125,23 @@ private struct GenerationCondition: Identifiable {
     let corpusCompression: String
     let meanSeconds: String
 
-    var id: String { "\(model)-\(prompt)" }
+    var id: String { "\(run.rawValue)-\(model)-\(prompt)" }
 
     static let all: [GenerationCondition] = [
-        .init(model: "Qwen3 · 1.7B", prompt: "Standard", meanWords: "53.77", meanCompression: "0.7702", corpusCompression: "0.7696", meanSeconds: "4.540"),
-        .init(model: "Qwen3 · 1.7B", prompt: "Factuality-aware", meanWords: "46.70", meanCompression: "0.6752", corpusCompression: "0.6684", meanSeconds: "3.032"),
-        .init(model: "Qwen3 · 4B", prompt: "Standard", meanWords: "54.10", meanCompression: "0.7829", corpusCompression: "0.7743", meanSeconds: "4.750"),
-        .init(model: "Qwen3 · 4B", prompt: "Factuality-aware", meanWords: "49.30", meanCompression: "0.7101", corpusCompression: "0.7056", meanSeconds: "4.126")
+        .init(run: .guardedRoman, model: "Qwen3 · 1.7B", prompt: "Standard", meanWords: "44.73", meanCompression: "0.6274", corpusCompression: "—", meanSeconds: "2.975"),
+        .init(run: .guardedRoman, model: "Qwen3 · 1.7B", prompt: "Factuality-aware", meanWords: "45.07", meanCompression: "0.6325", corpusCompression: "—", meanSeconds: "2.994"),
+        .init(run: .guardedRoman, model: "Qwen3 · 4B", prompt: "Standard", meanWords: "48.10", meanCompression: "0.6764", corpusCompression: "—", meanSeconds: "3.928"),
+        .init(run: .guardedRoman, model: "Qwen3 · 4B", prompt: "Factuality-aware", meanWords: "49.20", meanCompression: "0.6911", corpusCompression: "—", meanSeconds: "4.131"),
+
+        .init(run: .guardedDevanagari, model: "Qwen3 · 1.7B", prompt: "Standard", meanWords: "77.80", meanCompression: "0.2315", corpusCompression: "—", meanSeconds: "5.198"),
+        .init(run: .guardedDevanagari, model: "Qwen3 · 1.7B", prompt: "Factuality-aware", meanWords: "81.43", meanCompression: "0.2443", corpusCompression: "—", meanSeconds: "5.620"),
+        .init(run: .guardedDevanagari, model: "Qwen3 · 4B", prompt: "Standard", meanWords: "76.50", meanCompression: "0.2245", corpusCompression: "—", meanSeconds: "7.541"),
+        .init(run: .guardedDevanagari, model: "Qwen3 · 4B", prompt: "Factuality-aware", meanWords: "79.23", meanCompression: "0.2314", corpusCompression: "—", meanSeconds: "8.608"),
+
+        .init(run: .originalRoman, model: "Qwen3 · 1.7B", prompt: "Standard", meanWords: "53.77", meanCompression: "0.7702", corpusCompression: "0.7696", meanSeconds: "4.540"),
+        .init(run: .originalRoman, model: "Qwen3 · 1.7B", prompt: "Factuality-aware", meanWords: "46.70", meanCompression: "0.6752", corpusCompression: "0.6684", meanSeconds: "3.032"),
+        .init(run: .originalRoman, model: "Qwen3 · 4B", prompt: "Standard", meanWords: "54.10", meanCompression: "0.7829", corpusCompression: "0.7743", meanSeconds: "4.750"),
+        .init(run: .originalRoman, model: "Qwen3 · 4B", prompt: "Factuality-aware", meanWords: "49.30", meanCompression: "0.7101", corpusCompression: "0.7056", meanSeconds: "4.126")
     ]
 }
 
@@ -581,7 +622,7 @@ private struct FactIndicWindow: View {
     private var testBadgeText: String {
         if testRunner.isRunning { return "…" }
         if let code = testRunner.lastExitCode { return code == 0 ? "\(testRunner.passedCount)" : "!" }
-        return "49"
+        return "51"
     }
     private var testBadgeColor: Color {
         if let code = testRunner.lastExitCode { return code == 0 ? Palette.green : Palette.red }
@@ -611,20 +652,20 @@ private struct OverviewPage: View {
                 VStack(alignment: .leading, spacing: 10) {
                     Text("FactIndic").font(.system(size: 38, weight: .bold, design: .rounded)).tracking(-1.2).foregroundStyle(Palette.ink)
                     Text("Factuality-aware summarization for Hindi and Roman-script Hinglish").font(.system(size: 19, weight: .semibold)).foregroundStyle(Palette.green)
-                    Text("Paired 500-article Hindi baseline, 120-summary Roman-script Hinglish LLM pilot, and live Colab T4 verification pipeline.")
+                    Text("Paired 500-article Hindi baseline, 240-summary dual-archetype guarded re-evaluation (Roman Hinglish + Devanagari code-mixed), and live Colab T4 verification pipeline.")
                         .font(.system(size: 14)).foregroundStyle(Palette.secondaryInk).lineSpacing(4).frame(maxWidth: 760, alignment: .leading)
                 }
                 NoticeCard(title: "AI-screened results · human verification skipped",
-                           message: "The 120-summary factuality labels came from one AI-assisted source comparison, and the live Colab demo uses Qwen3 + secondary mDeBERTa NLI. Treat them as exploratory screening, not human-verified evidence.",
+                           message: "The original 120-summary labels came from AI-assisted comparison, and the new 240-summary dual-archetype re-evaluation uses greedy decoding + fact anchors + NLI gloss normalization + mDeBERTa NLI. Treat them as exploratory screening, not human-verified evidence.",
                            tone: .amber)
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 14) {
                     MetricCard(value: "500", title: "Hindi articles", detail: "Paired XL-Sum vs. p100 baseline", accent: Palette.green, actionHint: "Baselines", action: { navigate(.baselines) })
-                    MetricCard(value: "120", title: "Hinglish summaries", detail: "30 sources × 2 models × 2 prompts", accent: Palette.amber, actionHint: "Pilot", action: { navigate(.results) })
-                    MetricCard(value: testRunner.lastExitCode == nil ? "49" : "\(testRunner.passedCount)",
+                    MetricCard(value: "240", title: "Dual-archetype re-eval", detail: "30 Roman + 30 Devanagari × 4 runs", accent: Palette.green, actionHint: "Results", action: { navigate(.results) })
+                    MetricCard(value: testRunner.lastExitCode == nil ? "51" : "\(testRunner.passedCount)",
                                title: testRunner.isRunning ? "Running tests…" : "Unit tests", detail: testRunner.summaryLine,
                                accent: testRunner.failedCount > 0 ? Palette.red : Palette.green, actionHint: "Run & View",
                                action: { navigate(.tests); if testRunner.cases.isEmpty { testRunner.runTests() } })
-                    MetricCard(value: "0", title: "Local GPU load", detail: "Inference runs on Colab T4", accent: Palette.blue, actionHint: "Live JSON", action: { navigate(.liveDemo) })
+                    MetricCard(value: "46.7%", title: "Best guarded error rate", detail: "Qwen3 4B Roman (−33.3 pp vs. 80.0%)", accent: Palette.blue, actionHint: "Results", action: { navigate(.results) })
                 }
                 VStack(alignment: .leading, spacing: 14) {
                     HStack(spacing: 10) {
@@ -632,10 +673,10 @@ private struct OverviewPage: View {
                         Spacer()
                         Button("Hindi baselines") { navigate(.baselines) }.buttonStyle(.bordered).pointingHand()
                         Button("Pilot results") { navigate(.results) }.buttonStyle(.bordered).pointingHand()
-                        Button("Run 49 Tests") { navigate(.tests); testRunner.runTests() }.buttonStyle(.bordered).pointingHand()
+                        Button("Run 51 Tests") { navigate(.tests); testRunner.runTests() }.buttonStyle(.bordered).pointingHand()
                         Button("Live demo & JSON") { navigate(.liveDemo) }.buttonStyle(.borderedProminent).tint(Palette.green).pointingHand()
                     }
-                    Text("AI-assessed error counts ranged from 76.7% to 93.3% across the four Hinglish conditions. Both paired bootstrap intervals include zero (−6.7 pp for 1.7B, −3.3 pp for 4B), so this pilot does not identify a winning prompt.")
+                    Text("With the guarded pipeline, Roman-script Hinglish error rates dropped by 23.4–36.6 pp (to 46.7% on Qwen3 4B Standard, 53.3% pass rate). On long multi-paragraph Devanagari/code-mixed XL-Sum p=1.0 articles (0.22–0.24 compression), strict quote/NLI checks still flagged 93.3%–100.0% of outputs.")
                         .font(.system(size: 13)).foregroundStyle(Palette.secondaryInk).lineSpacing(4)
                 }
                 .padding(18).background(Palette.surface, in: RoundedRectangle(cornerRadius: 15))
@@ -648,7 +689,7 @@ private struct OverviewPage: View {
 
     private var testCountTag: String {
         if let code = testRunner.lastExitCode { return code == 0 ? "\(testRunner.passedCount) TESTS PASSED" : "\(testRunner.failedCount) TESTS FAILED" }
-        return "49 UNIT TESTS"
+        return "51 UNIT TESTS"
     }
 }
 
@@ -720,22 +761,49 @@ private struct BaselinePage: View {
 
 private struct ResultsPage: View {
     let navigateToGeneration: () -> Void
+    @State private var selectedRun: ResultRunKind = .guardedRoman
     @State private var selectedModel = "All models"
     @State private var selectedPrompt = "Both prompts"
     @State private var selectedRowId: String?
     private let models = ["All models", "Qwen3 · 1.7B", "Qwen3 · 4B"]
     private let prompts = ["Both prompts", "Standard", "Factuality-aware"]
     private var filtered: [PilotResult] {
-        PilotResult.all.filter { (selectedModel == "All models" || $0.model == selectedModel) && (selectedPrompt == "Both prompts" || $0.prompt == selectedPrompt) }
+        PilotResult.all.filter {
+            $0.run == selectedRun &&
+            (selectedModel == "All models" || $0.model == selectedModel) &&
+            (selectedPrompt == "Both prompts" || $0.prompt == selectedPrompt)
+        }
+    }
+
+    private var diffCards: (leftVal: String, leftDetail: String, rightVal: String, rightDetail: String, noticeTitle: String, noticeMsg: String) {
+        switch selectedRun {
+        case .guardedRoman:
+            return ("+6.7 pp", "95% paired CI: 0.0 to +16.67 (includes 0)", "+3.3 pp", "95% paired CI: 0.0 to +10.0 (includes 0)",
+                    "Guarded pipeline cut Roman Hinglish errors by 23.4–36.6 pp",
+                    "Error rates dropped from 76.7%–93.3% (original pilot) to 46.7%–63.3% (guarded pipeline), with Qwen3 4B Standard reaching 53.3% pass rate.")
+        case .guardedDevanagari:
+            return ("0.0 pp", "95% paired CI: 0.0 to 0.0 (all 30 flagged)", "−3.3 pp", "95% paired CI: −16.67 to +6.67 (includes 0)",
+                    "High compression on long XL-Sum Devanagari articles",
+                    "Devanagari/code-mixed XL-Sum p=1.0 sources are multi-paragraph (0.22–0.24 compression). Strict verbatim quote + NLI checks flagged 93.3%–100.0% of outputs.")
+        case .originalRoman:
+            return ("−6.7 pp", "95% paired CI: −20.0 to +6.7 (includes 0)", "−3.3 pp", "95% paired CI: −13.3 to +6.7 (includes 0)",
+                    "No prompt winner established",
+                    "Both paired bootstrap intervals include zero. Labels are AI judgments and have not been verified by a human annotator.")
+        }
     }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
-                HeaderTag(text: "AI-ASSISTED SCREENING · N = 30 PER CONDITION")
-                Text("Pilot results").font(.system(size: 34, weight: .bold, design: .rounded)).tracking(-1).foregroundStyle(Palette.ink)
-                Text("Error rate combines AI labels marked minor and major. Filter by model/prompt or click any row for condition notes.")
+                HeaderTag(text: "DUAL-ARCHETYPE & PILOT SCREENING · N = 30 PER CONDITION")
+                Text("Pilot & re-evaluation results").font(.system(size: 34, weight: .bold, design: .rounded)).tracking(-1).foregroundStyle(Palette.ink)
+                Text("Switch between the new guarded dual-archetype re-evaluation (Roman Hinglish and Devanagari code-mixed) and the original pilot. Click any row for notes.")
                     .font(.system(size: 13.5)).foregroundStyle(Palette.secondaryInk)
+                Picker("Dataset & Pipeline", selection: $selectedRun) {
+                    ForEach(ResultRunKind.allCases) { kind in
+                        Text(kind.rawValue).tag(kind)
+                    }
+                }.pickerStyle(.segmented).pointingHand()
                 HStack(spacing: 16) {
                     FilterPicker(title: "Model", selection: $selectedModel, options: models)
                     FilterPicker(title: "Prompt", selection: $selectedPrompt, options: prompts)
@@ -764,10 +832,10 @@ private struct ResultsPage: View {
                     }
                 }.background(Palette.surface, in: RoundedRectangle(cornerRadius: 15)).overlay(RoundedRectangle(cornerRadius: 15).stroke(Palette.line, lineWidth: 1)).clipShape(RoundedRectangle(cornerRadius: 15))
                 HStack(spacing: 14) {
-                    MetricCard(value: "−6.7 pp", title: "Qwen3 1.7B prompt diff", detail: "95% paired CI: −20.0 to +6.7 (includes 0)", accent: Palette.amber, actionHint: "Filter 1.7B", action: { selectedModel = "Qwen3 · 1.7B" })
-                    MetricCard(value: "−3.3 pp", title: "Qwen3 4B prompt diff", detail: "95% paired CI: −13.3 to +6.7 (includes 0)", accent: Palette.amber, actionHint: "Filter 4B", action: { selectedModel = "Qwen3 · 4B" })
+                    MetricCard(value: diffCards.leftVal, title: "Qwen3 1.7B prompt diff", detail: diffCards.leftDetail, accent: Palette.amber, actionHint: "Filter 1.7B", action: { selectedModel = "Qwen3 · 1.7B" })
+                    MetricCard(value: diffCards.rightVal, title: "Qwen3 4B prompt diff", detail: diffCards.rightDetail, accent: Palette.amber, actionHint: "Filter 4B", action: { selectedModel = "Qwen3 · 4B" })
                 }
-                NoticeCard(title: "No prompt winner established", message: "Both paired bootstrap intervals include zero. Labels are AI judgments and have not been verified by a human annotator.", tone: .amber)
+                NoticeCard(title: diffCards.noticeTitle, message: diffCards.noticeMsg, tone: selectedRun == .guardedRoman ? .green : .amber)
             }.padding(30).frame(maxWidth: 1000, alignment: .leading)
         }
     }
@@ -827,17 +895,26 @@ private struct ResultRow: View {
 }
 
 private struct GenerationMetricsPage: View {
+    @State private var selectedRun: ResultRunKind = .guardedRoman
     private let columns: [(String, CGFloat)] = [
         ("MODEL", 140), ("PROMPT", 165), ("MEAN WORDS", 110), ("MEAN COMPRESSION", 145), ("CORPUS COMPRESSION", 150), ("MEAN SECONDS", 120)
     ]
+    private var filteredConditions: [GenerationCondition] {
+        GenerationCondition.all.filter { $0.run == selectedRun }
+    }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
-                HeaderTag(text: "FINAL COLAB RUN · 30 OUTPUTS PER CONDITION")
+                HeaderTag(text: "COLAB T4 RUNS · 30 OUTPUTS PER CONDITION")
                 Text("Generation metrics").font(.system(size: 34, weight: .bold, design: .rounded)).tracking(-1).foregroundStyle(Palette.ink)
-                Text("Descriptive length, compression, and timing from the completed 120-summary run. Each condition used the same 30 source articles.")
+                Text("Descriptive length, compression, and timing across the guarded dual-archetype re-evaluation and original pilot. Each condition used 30 source articles.")
                     .font(.system(size: 13.5)).foregroundStyle(Palette.secondaryInk).lineSpacing(4).frame(maxWidth: 760, alignment: .leading)
+                Picker("Dataset & Pipeline", selection: $selectedRun) {
+                    ForEach(ResultRunKind.allCases) { kind in
+                        Text(kind.rawValue).tag(kind)
+                    }
+                }.pickerStyle(.segmented).pointingHand()
                 ScrollView(.horizontal) {
                     VStack(spacing: 0) {
                         HStack(spacing: 12) {
@@ -846,7 +923,7 @@ private struct GenerationMetricsPage: View {
                                     .frame(width: width, alignment: title == "MODEL" || title == "PROMPT" ? .leading : .trailing)
                             }
                         }.padding(15).background(Palette.surfaceAlt)
-                        ForEach(GenerationCondition.all) { row in
+                        ForEach(filteredConditions) { row in
                             HStack(spacing: 12) {
                                 Text(row.model).fontWeight(.semibold).foregroundStyle(Palette.ink).frame(width: columns[0].1, alignment: .leading)
                                 Text(row.prompt).foregroundStyle(Palette.green).frame(width: columns[1].1, alignment: .leading)
@@ -855,7 +932,7 @@ private struct GenerationMetricsPage: View {
                                 Text(row.corpusCompression).foregroundStyle(Palette.blue).frame(width: columns[4].1, alignment: .trailing)
                                 Text(row.meanSeconds).foregroundStyle(Palette.amber).frame(width: columns[5].1, alignment: .trailing)
                             }.font(.system(size: 12.5, design: .monospaced)).padding(.horizontal, 15).padding(.vertical, 14)
-                            if row.id != GenerationCondition.all.last?.id { Divider().overlay(Palette.line).padding(.horizontal, 15) }
+                            if row.id != filteredConditions.last?.id { Divider().overlay(Palette.line).padding(.horizontal, 15) }
                         }
                     }.frame(minWidth: columns.map(\.1).reduce(0, +) + 72, alignment: .leading)
                     .background(Palette.surface, in: RoundedRectangle(cornerRadius: 15))
@@ -864,7 +941,7 @@ private struct GenerationMetricsPage: View {
                 Text("Compression is summary words divided by source words. Generation time is per output on a shared Colab Tesla T4 and is descriptive, not a model-quality score.")
                     .font(.system(size: 12)).foregroundStyle(Palette.muted).lineSpacing(4)
                 VStack(alignment: .leading, spacing: 13) {
-                    Text("Mechanical quality audit").font(.system(size: 17, weight: .semibold)).foregroundStyle(Palette.ink)
+                    Text("Mechanical quality audit (original pilot)").font(.system(size: 17, weight: .semibold)).foregroundStyle(Palette.ink)
                     HStack(spacing: 12) {
                         MetricCard(value: "0", title: "Token-cap hits", detail: "All outputs ended below the retry cap")
                         MetricCard(value: "0", title: "Empty outputs", detail: "Every generation contains text")
@@ -1024,7 +1101,7 @@ private struct TestsPage: View {
                     }.buttonStyle(.borderedProminent).tint(Palette.green).disabled(runner.isRunning).pointingHand(!runner.isRunning)
                 }
                 HStack(spacing: 14) {
-                    MetricCard(value: runner.cases.isEmpty ? "49" : "\(runner.passedCount)", title: "Passed", detail: runner.cases.isEmpty ? "Expected test count" : "Verified in latest run", accent: Palette.green)
+                    MetricCard(value: runner.cases.isEmpty ? "51" : "\(runner.passedCount)", title: "Passed", detail: runner.cases.isEmpty ? "Expected test count" : "Verified in latest run", accent: Palette.green)
                     MetricCard(value: "\(runner.failedCount)", title: "Failed", detail: runner.failedCount == 0 ? "Zero failures" : "Inspect raw output below", accent: runner.failedCount == 0 ? Palette.green : Palette.red)
                     MetricCard(value: runner.durationText ?? "—", title: "Duration", detail: "Runs via .venv/bin/python", accent: Palette.blue)
                 }
@@ -1054,7 +1131,7 @@ private struct TestsPage: View {
                         Text("STATUS").frame(width: 90, alignment: .trailing)
                     }.font(.system(size: 10, weight: .bold, design: .monospaced)).tracking(0.6).foregroundStyle(Palette.muted).padding(15).background(Palette.surfaceAlt)
                     if filteredCases.isEmpty {
-                        HStack { Text(runner.cases.isEmpty ? "Click 'Run All Tests' to execute pytest and inspect all 49 checks." : "No test cases match the current filter.").font(.system(size: 13)).foregroundStyle(Palette.muted); Spacer() }.padding(18)
+                        HStack { Text(runner.cases.isEmpty ? "Click 'Run All Tests' to execute pytest and inspect all 51 checks." : "No test cases match the current filter.").font(.system(size: 13)).foregroundStyle(Palette.muted); Spacer() }.padding(18)
                     } else {
                         ForEach(filteredCases) { item in
                             HStack(spacing: 12) {
@@ -1092,10 +1169,10 @@ private struct MethodPage: View {
             VStack(alignment: .leading, spacing: 22) {
                 HeaderTag(text: "RESEARCH DESIGN")
                 Text("Method & limits").font(.system(size: 34, weight: .bold, design: .rounded)).tracking(-1).foregroundStyle(Palette.ink)
-                InfoBlock(title: "Target language", message: "Roman-script Hinglish: Hindi words written in Latin letters and mixed with English. The source corpus pairs English news articles with machine-generated and curated Hinglish translations.")
-                InfoBlock(title: "Paired generation", message: "Thirty fixed source articles were summarized by Qwen3 1.7B and Qwen3 4B. Each model used a standard prompt and a factuality-aware prompt, producing 120 outputs total. Generation ran on a Colab Tesla T4.")
-                InfoBlock(title: "Factuality screening", message: "One AI reviewer compared each summary to the Hinglish source visible to the model. The English article was a reading aid. The resulting 19 supported, 27 minor-error, and 74 major-error labels are provisional AI judgments, not human annotations.")
-                InfoBlock(title: "Interactive Colab safeguards", message: "The live evaluation notebook uses pure greedy decoding (removing repetition_penalty=1.03 and no_repeat_ngram_size=3, which caused ±1 digit shifts), verifies evidence quotes verbatim, and adds MoritzLaurer/mDeBERTa-v3-base-mnli-xnli as an unvalidated secondary NLI signal.")
+                InfoBlock(title: "Target languages (dual archetype)", message: "Supports both Roman-script Hinglish (News_Hinglish_English, Latin letters mixed with English) and Devanagari + English code-mixed text (XL-Sum Hindi with synthetic p=1.0 mixing).")
+                InfoBlock(title: "Paired generation & re-evaluation", message: "Original pilot: 30 Roman-script articles × 2 models × 2 prompts (120 outputs). Dual-archetype guarded re-evaluation: 30 Roman-script + 30 Devanagari/code-mixed articles × 4 conditions (240 outputs) on Colab T4.")
+                InfoBlock(title: "Factuality screening", message: "One AI reviewer compared each summary to the source visible to the model. Original pilot labels (19 supported, 27 minor, 74 major) and guarded re-evaluation labels remain provisional AI screening judgments, not human annotations.")
+                InfoBlock(title: "Interactive Colab safeguards", message: "The live evaluation notebook uses pure greedy decoding (removing repetition_penalty=1.03 and no_repeat_ngram_size=3, which caused ±1 digit shifts), deterministic fact anchors, verbatim quote verification, Hinglish NLI gloss normalization, and MoritzLaurer/mDeBERTa-v3-base-mnli-xnli.")
                 InfoBlock(title: "Why no ROUGE", message: "This dataset does not contain gold summaries. Reference-overlap metrics would not be applicable to these generated outputs.")
                 NoticeCard(title: "Scope of conclusions", message: "The sample is small, limited to news, and uses translated rather than naturally authored Hinglish. The pilot does not establish a winning prompt or generalize to all Hinglish. Human verification is intentionally skipped for this version.", tone: .amber)
                 VStack(alignment: .leading, spacing: 10) {

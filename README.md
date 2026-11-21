@@ -5,9 +5,13 @@ Semester project for NLP, Intelligent Model Design and MLOps (Bennett University
 
 ## Status
 
-Status updated 18 November 2026.
+Status updated 18 November 2026 (including **Dual-Archetype Guarded Re-Evaluation**).
 
 [![Open final pilot in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Sirohi0/factindic/blob/main/factindic_final_open_hinglish_colab.ipynb)
+
+**Dual-Archetype Guarded Re-Evaluation (240 outputs, Colab T4):** `factindic_dual_archetype_reeval_colab.ipynb` re-evaluated the full guarded pipeline (pure greedy decoding, deterministic `extract_fact_anchors`, verbatim quote verification, Hinglish NLI gloss normalization, and `NLI_CONTRADICTION_THRESHOLD = 0.85`) across **30 Roman-script Hinglish** (`News_Hinglish_English`) and **30 Devanagari/Code-Mixed** (`XL-Sum Hindi` `p=1.0`) articles × 4 conditions (`results/dual_archetype_reeval_summary.json`):
+- **Roman-Script Hinglish:** Error rates dropped by **23.4–36.6 pp** vs. the original pilot—`Qwen3 1.7B Standard`: `56.7%` (`13/30` supported, **−36.6 pp**), `Qwen3 1.7B Factuality-aware`: `63.3%` (`11/30` supported, **−23.4 pp**), `Qwen3 4B Standard`: `46.7%` (`16/30` supported, `2` minor, `12` major, **−33.3 pp**, `53.3%` pass rate), `Qwen3 4B Factuality-aware`: `50.0%` (`15/30` supported, `2` minor, `13` major, **−26.7 pp**).
+- **Devanagari / Code-Mixed (`XL-Sum` `p=1.0`):** On long multi-paragraph articles (`0.2245–0.2443` compression), strict quote/NLI checks flagged `100.0%` (`1.7B`), `96.7%` (`4B Standard`, `1/30` supported), and `93.3%` (`4B Factuality-aware`, `2/30` supported, `3` minor).
 
 **Final Roman-script Hinglish pilot (17 November):** the public `News_Hinglish_English` dataset was used after the teacher approved any dataset. The GPU run completed on 30 sources and produced 120 summaries across Qwen3-1.7B/Qwen3-4B and standard/factuality-aware prompts. The dataset's Hinglish side is machine-generated and curated, and it has no gold summaries, so ROUGE is not reported. A separate AI-assisted source comparison flagged 74 major errors, 27 minor errors, and 19 supported summaries; these are provisional AI judgments, not human factuality labels. The run is exploratory and establishes no prompt winner. Human validation is intentionally skipped for this version. The final run also exports per-condition summary length, compression, and generation-time metrics. Aggregate results are recorded in [`results/final_hinglish_generation_metrics_2026-11-18.md`](results/final_hinglish_generation_metrics_2026-11-18.md) and the companion CSV; no row-level source or summary text is published. See the [AI-screening report](docs/final_hinglish_ai_screening_report_2026-11-17.md), [run checkpoint](docs/final_hinglish_run_plan_2026-11-17.md), and [Colab notebook](factindic_final_open_hinglish_colab.ipynb).
 
