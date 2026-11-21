@@ -250,3 +250,28 @@ def test_fact_anchors_and_hinglish_nli_normalization():
     norm = namespace["normalize_hinglish_for_nli"](warning_src)
     assert "do not go" in norm.lower()
     assert "is closed" in norm.lower()
+
+
+def test_dual_archetype_detection_and_validation():
+    helpers = next(source for source in _python_cells() if "def detect_input_archetype(" in source)
+    tree = ast.parse(helpers)
+    function = next(
+        node for node in tree.body
+        if isinstance(node, ast.FunctionDef) and node.name == "detect_input_archetype"
+    )
+    namespace = {"re": __import__("re")}
+    exec(compile(ast.Module(body=[function], type_ignores=[]), "<archetype>", "exec"), namespace)
+    detect = namespace["detect_input_archetype"]
+
+    dev_sample = "भारत में pollution का level लगातार increase हो रहा है।"
+    rom_sample = "Bharat me pollution ka level lagatar increase ho raha hai."
+    assert detect(dev_sample, "Auto-detect") == "devanagari_codemixed"
+    assert detect(rom_sample, "Auto-detect") == "roman_hinglish"
+    assert detect(dev_sample, "Devanagari / Code-Mixed (Hindi + English)") == "devanagari_codemixed"
+    assert detect(rom_sample, "Roman-script Hinglish") == "roman_hinglish"
+
+    try:
+        detect(dev_sample, "Roman-script Hinglish")
+        raise AssertionError("Expected ValueError for Devanagari in Roman mode")
+    except ValueError:
+        pass
